@@ -1,6 +1,4 @@
-# BBB
-Bodged Bash Backup
-
+# Bodged Bash Backup
 ----
 A few bash files to help backup a linux computer. This program utilizes basj (obviously), as well as tar and rysnc for the actual work, and dialog for the 'menus.' 
 
