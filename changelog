@@ -1,0 +1,25 @@
+Version_Code.Sub_Prog.MinorTweaks
+
+---
+Current: 1.00.00
+Date: 4/2/2022
+	Finalized basic features with update to dialog, rsync, and use of simple auto version checking and configuration files.
+	
+	
+0------------0
+Scheme for version numbers is as follows:
+	Version_Code: change if sig change in UI, functionality, or addition or removal of sub-programs/features or directory layout. Some variable changes may qualify, and ANY change to how config files are used or located. 
+	Sub_Prog: change if a sub program changes full version #
+	MinorTweaks: spelling, formatting displays, etc. 
+	Use of "x" prior to Version is for experimental features/version.	
+
+Use of subprogram's internal change log will be numbered as follows. 
+    00.00
+    Version_Code.MinorChanges
+	    	Version_Code: change if sig alteration in input or output
+	    	MinorChanges: change as needed for code or spelling changes
+	    		also used in event another prog causes small fixes (e.g. like change in variable names but not how it it used in/out).
+
+
+
+
