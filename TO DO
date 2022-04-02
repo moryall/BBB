@@ -1,25 +1,5 @@
 TO DO:
 
-1) simple readme
-2) changelog
-	>renumerate older prog versions to zeta.0.00.00
-	>Main version & master change log tracking
-	    0.00.00
-	    Version_Code.Sub_Prog.MinorTweaks
-		Version_Code: change if sig change in UI or functionality
-		Sub_Prog: change if a sub program changes full version #
-			global and incremental
-		MinorTweaks: spelling, formatting displays, etc. 
-		Use of "b" prior to Version is beta testing version 
-	>Sub programs version and internal change logs
-	    00.00
-	    Version_Code.MinorChanges
-	    	Version_Code: change if sig alteration in input or output
-	    	MinorChanges: change if as needed for code or spelling changes
-	    		also used in event another prog causes small redo 
-	    		like change in variable names coming in
-
-
 Wishlist:
 
 ) Stream linecode 0
