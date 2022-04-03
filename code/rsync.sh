@@ -1,7 +1,7 @@
 #!/bin/bash
 #Program Name
 PRGNM="BKUP_rsycn"
-Ver="2.00"
+Ver="2.01"
 
 #  --- FILE SETUP ---
 #Nearly all done in 'dialog' which will pull this program
@@ -35,8 +35,8 @@ do
 		echo "--Backing up Home Hidden Folders" | tee -a "$log" | tee -a "$debug"
 		for i4 in ${!HID[@]}; do
 			echo "-Backing up ${HID[i4]}" | tee -a "$log" | tee -a "$debug"
-			INPUT="$PATHIN${HID[i4]}"
-			OUTPUT="$PATHOUT"
+			INPUT="$PATHIN${HID[i4]}$SL"
+			OUTPUT="$PATHOUT$SL${HID[i4]}"
 			E="$PATHIN.local/share/Steam"
 			#echo "Input:$INPUT  Output:$OUTPUT" | tee -a "$debug"
 			echo "rsync -aEhi --progress --exclude \'$E\' $extra$INPUT $OUTPUT" | tee -a "$debug"
@@ -97,6 +97,7 @@ done
 #Version_Code.MinorChanges
 
 #Change Log:
+#2.01: fixed rsync bug for A-2. Now it keeps directory structure for all hidden folders being backed up
 #2.00: updated for BKUP_RUN / BBB 1.00.00 intial release 
 #1.00: Created matched CP_v3 & Tar_v4
 
