@@ -526,7 +526,7 @@ echo "_________________________" | tee -a "$log" >> "$debug"
 echo "tar choices A2:" | tee -a "$log" >> "$debug"
 echo "$PRINTA2" | tee -a "$log" >> "$debug"
 echo "_________________________" | tee -a "$log" >> "$debug"
-echo "rsync choices B2:" | tee -a "$log" >> "$debug"
+echo "tar choices B2:" | tee -a "$log" >> "$debug"
 echo "$PRINTB2" | tee -a "$log" >> "$debug"
 echo "_________________________" | tee -a "$log" >> "$debug"
 echo "" | tee -a "$log" >> "$debug"
@@ -623,8 +623,5 @@ exit
 #Version_Code.MinorChanges
 
 #Change Log:
-#1.00 Version Original version
-
-
-
-
+#1.01: Fixed log & debug output for tar choices.
+#1.00: Version Original version
