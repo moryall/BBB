@@ -46,4 +46,3 @@ PG04="BOTH - different folders"
 #meta
 PRGNM="BBB"
 Ver="x1.00.01"
-
