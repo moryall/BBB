@@ -50,5 +50,4 @@ done
 #Version_Code.MinorChanges
 
 #Change Log:
-#1.00: Created
-
+#1.00: Created.

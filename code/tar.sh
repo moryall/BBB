@@ -110,17 +110,11 @@ done
 #Change Log:
 
 #5.01: Minor tweaks with quotes around folder creation.
-#5.00: updated for BKUP_RUN / BBB 1.00.00 intial release 
+#5.00: updated for BKUP_RUN / BBB 1.00.00 intial release.
 #4.01: added "complete" message to make log clearer.
 #4.00: added dialog, including checkboxes! added log and debug. FldB options 1-stop add! Complex backup use Options A.  
 #3.00: Simplified grabbing files from /home root; no longer will grab all folders, MUST list folders to preserve as new entries.
 #2.02: made folders match closer to cp_v2.
 #2.01: Made Documents and School seperate from HFS; excluded ARCHIVE from HFS, excluded .local/share/Steam from HFS(H).
 #2.00: Branch created removed sudo, must use companion app to eliviate sudo time out.
-#1.00: Created
-
-
-
-
-
-
+#1.00: Created.
