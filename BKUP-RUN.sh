@@ -22,7 +22,7 @@ echo ""
 
 #Auto version comparison
 echo "Checking if dependencies are installed..."
-source ./code/versionCheck.sh
+source ./code/prog-cm/versionCheck.sh
 echo "All dependencies are met."
 echo ""
 
@@ -64,11 +64,10 @@ echo ""
 echo "Starting Program..."
 sudo bash ./$FL3$SL$Prog00
 echo ""
-echo "All Done."
 echo -n "Press [ENTER] to close program"
 read var_blank
-echo "closing Backup-RUN..."
-sleep 5s
+echo "closing BKUP-RUN..."
+sleep 2s
 exit
 
 
@@ -76,16 +75,13 @@ exit
 #Version_Code.MinorChanges
 
 #Change Log:
-#2.00 Added code to grab and pass user name, and script choices to files in anticipation of one file to run TAR and RSYNC with passed options until another method of running sudo safely for long periods is trialed. 
+
+#2.01: Updated to reflect new directory structure
+#2.00: Added code to grab and pass user name, and script choices to files in anticipation of one file to run TAR and RSYNC with passed options until another method of running sudo safely for long periods is trialed. 
 #	CP is depricated with use of rsync and no longer provided. 
 #	Backups designed to fill folders below location Program Folder files in their own folder and will backup ../ to location program folder is in. 
 #	Will make dir if no dir.
 #	All logs dropped in log folder.
 #	Config file as common variables
 #	Auto-version checker added in
-#1.00 no version numbers, previously named "Backup-RUN.sh" See archived versions.
-
-
-
-
-
+#1.00: no version numbers, previously named "Backup-RUN.sh" See archived versions.

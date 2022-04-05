@@ -12,10 +12,10 @@ c=0
 
 #shorts
 SL="/"
-Sp0=" " #formerly 3
-Sp1=' "' #text needed to make dialog's options work in conjoining the text
+Sp0=" "
+Sp1=' "'
 Sp2='" off '
-Sp3="_" #formerly 4
+Sp3="_"
 Sp4="*"
 #extensions
 Ext1=".txt"
@@ -34,8 +34,8 @@ FL2="temp"
 FL3="code"
 
 #programs
-Prog00="dialog.sh"
-Prog01=""
+Prog00="master.sh"
+Prog01="dialog.sh"
 
 #program choice
 PG01="rsync"
@@ -45,4 +45,4 @@ PG04="BOTH - different folders"
 
 #meta
 PRGNM="BBB"
-Ver="x1.00.01"
+Ver="x2.00.00"

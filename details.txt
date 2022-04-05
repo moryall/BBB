@@ -1,0 +1,32 @@
+##### -- FILES AND FOLDERS -- #####
+
+*denotes folder or files auto generated
+
+)BBB - #home to the program also known as $srcd
+   ) temp* - #houses temporary files for transfering variables
+   ) logs* - #all output logs & debugs go here by date
+      > yyyy-mm-dd_log-x.txt* - #will gain new sequence per day & interation
+      > yyyy-mm-dd_log-x.txt* - #will gain new sequence per day & interation
+   ) code - #houses program code
+   	) conf-hm  - #configuration files for home backup
+   	   > config-ARS.sh - #config for A folders in rsync
+   	   > config-ATR.sh - #config for A folders in tar
+   	   > config-B.sh - #config for B folders used in both
+   	   > config-GM.sh - #config for game folders in both
+   	   > config-HID.sh - #config for hidden folders in both
+      	)Xconf-srv - #configuration files for server backup
+      	) prog-cm  - #program files used universally (may need different config file)
+      	   > versionCheck.sh - #Checks depedencies for common commands in BBB
+      	) prog-hm  - #program files used for home backup
+      	   > dialog.sh - #the main body of choice selection and preperation
+      	   > rsync.sh - #the main rsync program
+      	   > tar.sh - #the main tar program
+      	)Xprog-srv - #program files used for server backup
+      > master.sh - #main program that determines what other programs and config files
+      > var.sh - #universal variables used in all programs. Called mainly by master.sh
+  > BKUP-RUN.sh - #the file to run the whole thing as sudo use with caution
+  > changelog - #on label
+  > details.txt - #this manual
+  > README.md #the other manual
+  > ToDo.txt - #a list of future plans/goals
+

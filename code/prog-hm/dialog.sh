@@ -1,61 +1,5 @@
 #!/bin/bash
 
-printf '\e[8;40;120t'
-#  --- FILE SETUP --- #
-
-#grab other variables
-source ./code/var.sh
-
-# - Load Temp - #
-bk=$(pwd)
-#temp files locations
-tmpA="$bk$SL$FL2$SL$Wd4-cwd$Ext1"
-tmpB="$bk$SL$FL2$SL$Wd4-srcd$Ext1"
-tmpC="$bk$SL$FL2$SL$Wd4-N$Ext1"
-tmpD="$bk$SL$FL2$SL$Wd4-DC$Ext1"
-#load in temp var
-cwd=$(<"$tmpA")
-srcd=$(<"$tmpB")
-N=$(<"$tmpC")
-DC=$(<"$tmpD")
-
-# - Make Logs - #
-#log file locations
-log=$srcd$SL$FL1$SL$DC$Sp3$Wd2
-debug=$srcd$SL$FL1$SL$DC$Sp3$Wd3
-
-#check if already, if yes add number
-if [[ -e $log.txt || -L $log.txt ]] ; then
-    i=0
-    while [[ -e $log-$i.txt || -L $log-$i.txt ]] ; do
-        let i++
-    done
-    log=$log-$i
-fi
-log="$log$Ext1"
-if [[ -e $debug.txt || -L $debug.txt ]] ; then
-    i=0
-    while [[ -e $debug-$i.txt || -L $debug-$i.txt ]] ; do
-        let i++
-    done
-    debug=$debug-$i
-fi
-debug="$debug$Ext1"
-
-#log headers
-printf "Log File - " | tee "$log" > "$debug"
-date | tee -a "$log" >> "$debug"
-echo "$PRGNM version $Ver" | tee -a "$log" >> "$debug"
-echo "User: $N" | tee -a "$log" >> "$debug"
-echo "File Location:" | tee -a "$log" >> "$debug"
-echo "$srcd" | tee -a "$log" >> "$debug"
-echo "" | tee -a "$log" >> "$debug"
-echo "Working Directory:" | tee -a "$log" >> "$debug"
-echo "$cwd" | tee -a "$log" >> "$debug"
-echo "" | tee -a "$log" >> "$debug"
-
-
-
 # --- DIALOG PROGRAM --- #
 
 # Define the dialog exit status codes
@@ -266,23 +210,23 @@ if [ "$OptTar" -eq "$O" ]; then
 	if [ "$i" -eq "$T" ]; then
 		
 		echo "Pull config ATR - 122" >> "$debug"
-		source ./code/config-ATR.sh
+		source ./code/conf-hm/config-ATR.sh
 		Alpha="For tar:"
 		OutA2=()
 		OutB2=()
 	else
 		echo "Pull config ARS - 121" >> "$debug"
-		source ./code/config-ARS.sh
+		source ./code/conf-hm/config-ARS.sh
 		Alpha="For rsync:"
 	fi	
     else
 	echo "Pull config ARS - 11x" >> "$debug"
-	source ./code/config-ARS.sh
+	source ./code/conf-hm/config-ARS.sh
 	Alpha=""
     fi
 else
     echo "Pull config ARS - 0xx" >> "$debug"
-    source ./code/config-ARS.sh
+    source ./code/conf-hm/config-ARS.sh
     Alpha=""
 fi
 echo "" >> "$debug"
@@ -310,7 +254,7 @@ OptB=()
 LstB=()
 ChB=()
 #get Options
-source ./code/config-B.sh
+source ./code/conf-hm/config-B.sh
 
 <<'FINDBUG'
 echo "Folder B Options:" >> "$debug"
@@ -566,7 +510,8 @@ echo ""  >> $debug
 FINDBUG
 
 
-source ./code/config-HID.sh
+source ./code/conf-hm/config-HID.sh
+source ./code/conf-hm/config-GM.sh
 
 # --- PROGRAMS --- #
 clear
@@ -579,7 +524,7 @@ if [ "$OptRS" -eq "$O" ]; then
 	echo "Starting rsync..."
 	printf "Start rsync - $(date)" | tee -a "$log" >> "$debug"
 	echo "" | tee -a "$log" | tee -a "$debug"
-	source ./code/rsync.sh
+	source ./code/prog-hm/rsync.sh
 	printf "Completed rsync - $(date)" | tee -a "$log" >> "$debug"
 	echo "" | tee -a "$log" | tee -a "$debug"
   elif [ "$OptRS" -eq "$Z" ]; then
@@ -599,7 +544,7 @@ if [ "$OptTar" -eq "$O" ]; then
 	echo "Starting tar..." | tee -a "$log" | tee -a "$debug"
 	printf "Start tar - $(date)" | tee -a "$log" >> "$debug"
 	echo "" | tee -a "$log" | tee -a "$debug"
-	source ./code/tar.sh
+	source ./code/prog-hm/tar.sh
 	printf "Completed tar - $(date)" | tee -a "$log" >> "$debug"
 	echo "" | tee -a "$log" | tee -a "$debug"
   elif [ "$OptTar" -eq "$Z" ]; then
@@ -608,20 +553,11 @@ if [ "$OptTar" -eq "$O" ]; then
   	echo "No program selected - see debug log" | tee -a "$log" | tee -a "$debug"
 fi
 
-echo "" | tee -a "$log" | tee -a "$debug"
-echo "Finished Backup" | tee -a "$log" | tee -a "$debug"
-echo ""
-printf "Completed at - $(date)" | tee -a "$log" >> "$debug"
-echo "Thank you for backing up your files."
-echo "Please place these files in a safe location."
-echo -n "Press [ENTER] to close $PRGNM."
-read var_blank
-
-exit
 
 #Version_1.00
 #Version_Code.MinorChanges
 
 #Change Log:
+#2.00: Shortened due to new directory structure & master.sh 
 #1.01: Fixed log & debug output for tar choices.
 #1.00: Version Original version
