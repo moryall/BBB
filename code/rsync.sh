@@ -100,8 +100,6 @@ done
 
 #Change Log:
 #2.02: fixed erroneous folder creation. Fixed lack of parent folders for hidden & games.
-#2.01: fixed rsync bug for A-2 now it keeps directory structure
-#2.00: updated for BKUP_RUN / BBB 1.00.00 intial release 
-#1.00: Created matched CP_v3 & Tar_v4
-
-
+#2.01: fixed rsync bug for A-2. Now it keeps directory structure for all hidden folders being backed up.
+#2.00: updated for BKUP_RUN / BBB 1.00.00 intial release.
+#1.00: Created matched CP_v3 & Tar_v4.
