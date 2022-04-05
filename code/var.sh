@@ -12,11 +12,12 @@ c=0
 
 #shorts
 SL="/"
-Sp0=" "
-Sp1=' "'
-Sp2='" off '
-Sp3="_"
-Sp4="*"
+Sp0=" " #Blank Space
+Sp1=' "' #dialog's option spacer
+Sp2='" off ' #dialog's option spacer
+Sp3="_" #used many places, especially file names
+Sp4="*" #used when wildcard is needed
+Sp5="^" #used as a spacer in variable split/joiner
 #extensions
 Ext1=".txt"
 Ext2=".tgz"
@@ -45,4 +46,4 @@ PG04="BOTH - different folders"
 
 #meta
 PRGNM="BBB"
-Ver="x2.00.00"
+Ver="x2.00.00-01"

@@ -1,6 +1,10 @@
 Version_Code.Sub_Prog.MinorTweaks
 
 ---
+x2.00.00-01
+Date: 4/5/2022
+	Updated Dialog to have looped variable maker, cleaned code, and changed forbidden spacer to ^ instead of _ for the variable maker. Now tied to Sp0 and Sp5
+---
 x2.00.00
 Date: 4/4/2022
 	Began work on new directory and program overall in experimental branch.

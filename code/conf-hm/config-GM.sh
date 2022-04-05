@@ -4,7 +4,7 @@
 
 #  --- OPTIONS  --- #
 #List of Folder to copy for games (actual variable array)
-# !!! Options MUST contain NO spaces. No underscores!!!
+# !!! Options MUST contain NO spaces. No Circumflex "^"!!!
 GameAr=(
 "MC" 
 "Steam"

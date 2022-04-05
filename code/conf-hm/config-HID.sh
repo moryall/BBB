@@ -4,7 +4,7 @@
 
 #  --- OPTIONS  --- #
 #Hidden Folders to copy (actual variable array)
-# !!! Options MUST contain NO spaces. No underscores!!!
+# !!! Options MUST contain NO spaces. No Circumflex "^"!!!
 HID=(
 ".compiz" 
 ".config" 

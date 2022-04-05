@@ -5,7 +5,7 @@
 #  --- OPTIONS  --- #
 
 #list B. list folders to use; case sensitive spelling
-# !!! Options MUST contain NO spaces. No underscores!!!
+# !!! Options MUST contain NO spaces. No Circumflex "^"!!!
 FldB=(
 	"ARCHIVE"
 	"DATA"
