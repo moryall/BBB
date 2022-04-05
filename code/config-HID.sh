@@ -18,7 +18,7 @@ HID=(
 ".local/share/keyrings" 
 ".local/share/nautilus" 
 ".local/share/okular" 
-".local/share/rythmbox" 
+".local/share/rhythmbox" 
 ".local/share/shotwell" 
 ".mozilla" 
 ".pwsafe" 
