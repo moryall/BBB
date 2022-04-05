@@ -39,7 +39,7 @@ esac
 # - Dialog 2 - #
 
 # - Name Choice - #
-while true; do
+while true; do #1
 #turing user name check
 dialog --no-label "Change" --title "Backup Intro 2" --yesno  "Is the following the correct user name for back up: \n
 $N" 30 76 
@@ -67,7 +67,7 @@ case $return_value in # Act on the exit status
 		;;
 	esac
 esac
-done # Name choice confirm while loop ends here
+done #1 Name choice confirm while loop ends here
 
 
 
@@ -78,7 +78,7 @@ done # Name choice confirm while loop ends here
 # - Dialog 3 - #
 # - Program Choice - #
 while true; do #2
-while true; do #1
+while true; do #2.1
 #Choice of program
 cmd=(dialog --title "Backup Program Select" --radiolist "Select a backup program:" 30 76 20)
 Pg=(
@@ -99,15 +99,13 @@ fi
 if [ -z "$Pg" ]; then
   dialog --ok-label "Redo" --title "No Program Selected" --msgbox "You must select a program." 30 76
 else
-break #ends loop 1
+break #2.1x
 fi
-done #end off choice loop 1
+done #2.1
 Pg1=$Pg
-cmd=""
 
 #interpret choice
-for Pg1 in $Pg1
-do
+for Pg1 in $Pg1; do #2.2
     case $Pg1 in
         1)
             PgD="$Pg1 $PG01"
@@ -134,7 +132,7 @@ do
             Lp=2
             ;;
     esac
-done
+done #2.2
 
 #Chose if RS to use --delete tag added
 if [ "$OptRS" -eq "$O" ]; then
@@ -156,7 +154,6 @@ else
    	RSoptDialog=""
 fi	
 cmd=""
-$?=""
 
 #display choice
 dialog --yes-label "Continue" --no-label "Redo" --title "Backup Program Choice" --yesno  "You have selected to run the following:\n
@@ -174,7 +171,6 @@ case $return_value in # Act on the exit status
   	;;
 esac
 cmd=""
-$?=""
 done #end off choice loop 2
 
 echo "Program Choice: $PgD"  | tee -a "$log" >> "$debug"
@@ -189,21 +185,17 @@ echo "" | tee -a "$log" >> "$debug"
 # -- OPTIONS LOOPS -- #
 
 # - Display check skip - #
-while true; do
+while true; do #3
 
 # - Start Options Loop - #
-for i in $(seq $Lp); do
+for i in $(seq $Lp); do #3.1
 echo "# Loop number: $i Out of: $Lp" >> "$debug"
 
 # - Pull Options - #
 #Options A
 #clear any existing (useful for loop)
-FldA=()
-NumA=()
-OptA=()
-LstA=()
-LstAx=()
-ChA=()
+FldA=() NumA=() OptA=() LstA=() LstAx=() ChA=() 
+
 #check what program and loop interation
 if [ "$OptTar" -eq "$O" ]; then
     if [ "$Lp" -eq "$T" ]; then
@@ -231,12 +223,10 @@ else
 fi
 echo "" >> "$debug"
 NumA=($(seq 1 1 ${#AN00[@]})) #make an array with 1 through exact number of item
-for NA1 in ${!NumA[@]}; do #joins numbers and folders into text for options list
-  LstAx+=${NumA[$NA1]}$Sp0${AN00[$NA1]}$Sp3 #Ax for keeping A clear. 
+  for NA1 in ${!NumA[@]}; do #joins numbers and folders into text for options list
+	LstAx+=${NumA[$NA1]}$Sp0${AN00[$NA1]}$Sp3 #Ax for keeping A clear. 
   done
 OptA=("${LstA[@]}")
-
-
 
 <<'FINDBUG'
 echo "Folder A Options:" >> "$debug"
@@ -248,11 +238,8 @@ FINDBUG
 
 #Options B
 #clear any existing (useful for loop)
-FldB=()
-NumB=()
-OptB=()
-LstB=()
-ChB=()
+FldB=() NumB=() OptB=() LstB=() ChB=()
+
 #get Options
 source ./code/conf-hm/config-B.sh
 
@@ -265,14 +252,13 @@ FINDBUG
 
 #setup
 NumB=($(seq 1 1 ${#FldB[@]})) #make an array with 1 through exact number of item in Fld
-for ib in ${!NumB[@]}; do #joins numbers and folders into text for options list
-  LstB+=${NumB[$ib]}$Sp1${FldB[$ib]}$Sp2
+  for ib in ${!NumB[@]}; do #joins numbers and folders into text for options list
+	LstB+=${NumB[$ib]}$Sp1${FldB[$ib]}$Sp2
   done
 
 
 # - Options Dialogs - #
 cmd=""
-$?=""
 #Start of Dialog A
 cmd=(dialog --title "Backup Options A" --checklist "Select folder options A: \n $Alpha" 30 76 20)
 ChA=$("${cmd[@]}" "${OptA[@]}" 2>&1 >/dev/tty)
@@ -286,7 +272,6 @@ else
 echo ""
 fi
 cmd=""
-$?=""
 
 #Start of Dialog B
 cmd=(dialog --title "Backup Options B" --checklist "Select folder options B: \n $Alpha" 30 76 20) #--separate-output was taken out
@@ -302,7 +287,6 @@ else
 echo ""
 fi
 cmd=""
-$?=""
 
 #Write choices out
 if [ "$i" -eq "$T" ]; then
@@ -314,84 +298,69 @@ if [ "$i" -eq "$T" ]; then
 	OutA2=$ChA
 	OutB2=$ChB
 fi
-done #done for options loop
+done #3.1 done for options loop
 
 
 
 # - Display Choices - #
  
-#make displayable
-# echo "Choices A1:" | tee -a "$log" >> "$debug"
-IFS=' ' read -ra Var1 <<< "${OutA1[@]}"  #break choices into seperate array items
-#Var1=choices array
-for r1 in ${!Var1[@]}; do  	#conjoin choice output Nums with folder names (string)
-  Var2+=${Var1[$r1]}$Sp0${AN00[${Var1[$r1]}-1]}$Sp3
-done
-IFS='_' read -ra Var3 <<< "${Var2[@]}" #split string into individual array entries
-#Var3=choice Number_Folder
-printf "'%s'\n" "${Var3[@]}" #| tee -a "$log" >> "$debug" #print array items on new lines
-PRINTA1=$(printf "'%s'\n" "${Var3[@]}") #print the list out on each line into a variable
-Var1=() Var2=() Var3=() Var4=() Var5=() #clear
+#Variable Maker Loop
+for x in {0..3};do #3.2 #Run 4 times (once per input/output)
+   for x in $x; do #3.2.1 #Get Variables for the round
+	case $x in
+		0) 
+		   OUT=$OutA1
+		   FLD=("${AN00[@]}") ;;
+		1) 
+		   OUT=$OutB1
+		   FLD=("${FldB[@]}") ;;
+		2)
+		   OUT=$OutA2
+		   FLD=("${AN00[@]}") ;;
+		3) 
+		   OUT=$OutB2
+		   FLD=("${FldB[@]}") ;;
+	esac
+   done #3.2.1
+
+#Part 1: Make Printable List w/ numbers
+IFS=$Sp0 read -ra Var1 <<< "${OUT[@]}"  #break choice #s into seperate array items
+   for r1 in ${!Var1[@]}; do  #conjoin choice #s w/ folder. String seperated by Sp3
+	Var2+=${Var1[$r1]}$Sp0${FLD[${Var1[$r1]}-1]}$Sp5
+   done
+IFS=$Sp5 read -ra Var3 <<< "${Var2[@]}" #break string into seperate array items by Sp3
+#Var3="Number Folder" per item
+PRINT=$(printf "'%s'\n" "${Var3[@]}") #print array items on new lines for display
+
+#Part 2: Make Printable List w/o numbers
+   for i3 in ${!Var1[@]}; do
+	Var4+=${FLD[${Var1[$i3]}-1]}$Sp5 #Var4="Folder_" in continuous string by Sp3
+   done
+IFS=$Sp5 read -ra Var5 <<< "${Var4[@]}" #break string into seperate array items by Sp3
+#Var5="Folder" per line
+
+   for x in $x; do #3.2.2 #Output for each round
+	case $x in
+		0) 
+		   TRASH=("${Var5[@]}")
+		   PRINTA1=("${PRINT[@]}") ;;
+	   	1) 
+		   CFB1=("${Var5[@]}")
+	   	   PRINTB1=("${PRINT[@]}") ;;
+		2)
+		   TRASH=("${Var5[@]}")
+		   PRINTA2=("${PRINT[@]}") ;;
+		3) 
+		   CFB2=("${Var5[@]}")
+		   PRINTB2=("${PRINT[@]}") ;;
+	esac
+   done #3.2.2
+#clean up before potential next loop
+OUT=() FLD=() PRINT=() TRASH=() Var1=() Var2=() Var3=() Var4=() Var5=()
+done #3.2
 
 
-#echo "Choices B1:" | tee -a "$log" >> "$debug"
-IFS=' ' read -ra Var1 <<< "${OutB1[@]}"  #break choices into seperate array items
-#Var1=choices array
-for r1 in ${!Var1[@]}; do  	#conjoin choice output Nums with folder names (string)
-  Var2+=${Var1[$r1]}$Sp0${FldB[${Var1[$r1]}-1]}$Sp3
-done
-IFS='_' read -ra Var3 <<< "${Var2[@]}" #split string into individual array entries
-#Var3=choice Number_Folder
-printf "'%s'\n" "${Var3[@]}" #| tee -a "$log" >> "$debug" #print array items on new lines
-PRINTB1=$(printf "'%s'\n" "${Var3[@]}") #print the list out on each line into a variable
-##Prep just folder names in background##
-#take only folder names of corresponding choices
-for i3 in ${!Var1[@]}; do
-  Var4+=${FldB[${Var1[$i3]}-1]}$Sp3
-done
-#Var4=continous string Folder_Folder
-IFS='_' read -ra Var5 <<< "${Var4[@]}" #split folders appart for insertion into backup name
-#Var5=just folder texts per entry
-CFB1=("${Var5[@]}")
-Var1=() Var2=() Var3=() Var4=() Var5=() #clear
-
-
-#echo "Choices A2:" | tee -a "$log" >> "$debug"
-IFS=' ' read -ra Var1 <<< "${OutA2[@]}"  #break choices into seperate array items
-#Var1=choices array
-for r1 in ${!Var1[@]}; do  	#conjoin choice output Nums with folder names (string)
-  Var2+=${Var1[$r1]}$Sp0${AN00[${Var1[$r1]}-1]}$Sp3
-done
-IFS='_' read -ra Var3 <<< "${Var2[@]}" #split string into individual array entries
-#Var3=choice Number_Folder
-printf "'%s'\n" "${Var3[@]}" #| tee -a "$log" >> "$debug" #print array items on new lines
-PRINTA2=$(printf "'%s'\n" "${Var3[@]}") #print the list out on each line into a variable
-Var1=() Var2=() Var3=() Var4=() Var5=() #clear
-
-
-#echo "Choices B2:" | tee -a "$log" >> "$debug"
-IFS=' ' read -ra Var1 <<< "${OutB2[@]}"  #break choices into seperate array items
-#Var1=choices array
-for r1 in ${!Var1[@]}; do  	#conjoin choice output Nums with folder names (string)
-  Var2+=${Var1[$r1]}$Sp0${FldB[${Var1[$r1]}-1]}$Sp3
-done
-IFS='_' read -ra Var3 <<< "${Var2[@]}" #split string into individual array entries
-#Var3=choice Number_Folder
-printf "'%s'\n" "${Var3[@]}" #| tee -a "$log" >> "$debug" #print array items on new lines
-PRINTB2=$(printf "'%s'\n" "${Var3[@]}") #print the list out on each line into a variable
-##Prep just folder names in background##
-#take only folder names of corresponding choices
-for i3 in ${!Var1[@]}; do
-  Var4+=${FldB[${Var1[$i3]}-1]}$Sp3
-done
-#Var4=continous string Folder_Folder
-IFS='_' read -ra Var5 <<< "${Var4[@]}" #split folders appart for insertion into backup name
-#Var5=just folder texts per entry
-CFB2=("${Var5[@]}")
-Var1=() Var2=() Var3=() Var4=() Var5=() #clear
-
-
-#display choices
+#Actuall Display them
 # Define the dialog exit status codes
 : ${DIALOG_OK=0}
 : ${DIALOG_CANCEL=1}
@@ -399,22 +368,16 @@ Var1=() Var2=() Var3=() Var4=() Var5=() #clear
 : ${DIALOG_EXTRA=3}
 : ${DIALOG_ITEM_HELP=4}
 : ${DIALOG_ESC=255}
-dialog --yes-label "Continue" --no-label "Redo" --title "Confirm Folder Options" --yesno  "Does the following look correct: \n
-\n
+dialog --yes-label "Continue" --no-label "Redo" --title "Confirm Folder Options" --yesno  "Does the following look correct: \n \n
 Programs Selected: \n
 $PgD \n
-$RSoptDialog \n
-\n
+$RSoptDialog \n \n
 Folders for rsync (if applicable) \n
 $PRINTA1 \n
-$PRINTB1 \n
-\n
+$PRINTB1 \n \n
 Folders for tar (if applicable) \n
 $PRINTA2 \n
-$PRINTB2 \n
-\n
-\n
-\n
+$PRINTB2 \n \n \n \n
 Confirm or press [No] to try again." 30 76 
 return_value=$? # Get dialog's exit status
 case $return_value in # Act on the exit status
@@ -428,9 +391,8 @@ case $return_value in # Act on the exit status
   ;;
 esac
 #####  display check choice confirm while loop ends here  ######
-done # this is the end of while loop
+done #3 this is the end of while loop
 cmd=""
-$?=""
 
 # Define the dialog exit status codes
 : ${DIALOG_OK=0}
@@ -440,11 +402,9 @@ $?=""
 : ${DIALOG_ITEM_HELP=4}
 : ${DIALOG_ESC=255}
 dialog --title "Final Confirmation" --yesno  "\n \n \n \n
-Are you ready to begin? \n
-\n
+Are you ready to begin? \n \n
 You may check the log file if you need to double check. \n
-Canceling here will end the progam \n
-\n
+Canceling here will end the progam \n \n
 Press [Yes] to begin or press [No] to exit." 30 76 
 return_value=$? # Get dialog's exit status
 case $return_value in # Act on the exit status
@@ -457,7 +417,6 @@ case $return_value in # Act on the exit status
   ;;
 esac
 cmd=""
-$?=""
 
 #debug and results for logs
 echo "#########################" | tee -a "$log" >> "$debug"
@@ -476,45 +435,14 @@ echo "_________________________" | tee -a "$log" >> "$debug"
 echo "" | tee -a "$log" >> "$debug"
 echo "" | tee -a "$log" >> "$debug"
 
-#bug hunt
-<<'FINDBUG'
-clear
-echo ""
-echo "OutA1: $OutA1" | tee -a "$debug"
-echo ""
-echo "OutA2: $OutA2" | tee -a "$debug"
-echo ""
-echo "OutB1: $OutB1" | tee -a "$debug"
-echo ""
-echo "OutB2: $OutB2" | tee -a "$debug"
-
-echo -n "Press [ENTER] to close program"
-read var_blank
-#test outs for debuging
-<<'111'
-echo ""  >> $debug
-echo "-Var1-" >> $debug
-echo "${Var1[@]}" >> $debug
-echo "-Var2-" >> $debug
-echo "${Var2[@]}" >> $debug
-echo "-Var3-" >> $debug
-echo "${Var3[@]}" >> $debug
-echo "-Var4-" >> $debug
-echo "${Var4[@]}" >> $debug
-echo "-Var5-" >> $debug
-echo "${Var5[@]}" >> $debug
-echo "-VarX-" >> $debug
-echo "${VarX[@]}" >> $debug
-echo ""  >> $debug
-111
-FINDBUG
 
 
+# --- PROGRAMS --- #
+#Grab Hiddens in Prep for programs
 source ./code/conf-hm/config-HID.sh
 source ./code/conf-hm/config-GM.sh
 
-# --- PROGRAMS --- #
-clear
+clear #So you can see the text on the screen
 echo "#########################" | tee -a "$log" | tee -a "$debug"
 echo " -- Main Programs -- " | tee -a "$log" | tee -a "$debug"
 
@@ -532,8 +460,8 @@ if [ "$OptRS" -eq "$O" ]; then
   else
   	echo "No program selected - see debug log" | tee -a "$log" | tee -a "$debug"
 fi
-PATHIN=()
-PATHOUT=()
+PATHIN=() PATHOUT=() #clear between programs
+
 echo "" | tee -a "$log" >> "$debug"
 echo "" | tee -a "$log" >> "$debug"
 echo "__________________________" | tee -a "$log" >> "$debug"
@@ -558,6 +486,7 @@ fi
 #Version_Code.MinorChanges
 
 #Change Log:
+#3.00: Added loop for variable maker. Added better loop numbering. Cleaners up layout.
 #2.00: Shortened due to new directory structure & master.sh 
 #1.01: Fixed log & debug output for tar choices.
 #1.00: Version Original version

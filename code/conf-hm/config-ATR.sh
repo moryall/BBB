@@ -4,7 +4,7 @@
 
 #  --- OPTIONS  --- #
 
-#list A. (non name specific names)
+#list A. (non name specific names just no Circumflex)
 #!!!!!! Check your Choices & Program Settings if you change these!!!!!!!
 AN00=(
 	"Root" 
