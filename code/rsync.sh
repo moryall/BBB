@@ -1,7 +1,7 @@
 #!/bin/bash
 #Program Name
 PRGNM="BKUP_rsycn"
-Ver="2.01"
+Ver="2.02"
 
 #  --- FILE SETUP ---
 #Nearly all done in 'dialog' which will pull this program
@@ -9,15 +9,15 @@ Ver="2.01"
 # - PATH - #
 #pathin with usr name
 #should be dynamic equivilant to: PATHIN=/home/michael/
-PATHIN=$FL0$N$SL
+PATHIN="$FL0$N$SL"
 
 #pathout dynamic
-PATHOUT=$cwd$SL$Wd5
+PATHOUT="$cwd$SL$Wd5"
 
-if [ -d "$cwd$Wd6" ]; then
+if [ -d "$cwd$Wd5" ]; then
 echo "" ;
 else
-`mkdir -p $cwd$Wd6`;
+`mkdir -p "$cwd$Wd5"`;
 fi
 
 # --- BODY --- #
@@ -39,6 +39,7 @@ do
 			OUTPUT="$PATHOUT$SL${HID[i4]}"
 			E="$PATHIN.local/share/Steam"
 			#echo "Input:$INPUT  Output:$OUTPUT" | tee -a "$debug"
+			echo "mkdir -p $OUTPUT"
 			echo "rsync -aEhi --progress --exclude \'$E\' $extra$INPUT $OUTPUT" | tee -a "$debug"
 		done
 		echo "Home Hidden Folders Complete - $(date)" | tee -a "$log" | tee -a "$debug"
@@ -66,6 +67,7 @@ do
 			INPUT="$PATHIN${GameAr[i4]}"
 			OUTPUT="$PATHOUT"
 			#echo "Input:$INPUT  Output:$OUTPUT" | tee -a "$debug"
+			echo "mkdir -p $OUTPUT"
 			echo "rsync -aEhi --progress $extra$INPUT $OUTPUT" | tee -a "$debug"
 		done
 		echo "Games Complete - $(date)" | tee -a "$log" | tee -a "$debug"
@@ -97,6 +99,7 @@ done
 #Version_Code.MinorChanges
 
 #Change Log:
+#2.02: fixed erroneous folder creation. Fixed lack of parent folders for hidden & games.
 #2.01: fixed rsync bug for A-2. Now it keeps directory structure for all hidden folders being backed up
 #2.00: updated for BKUP_RUN / BBB 1.00.00 intial release 
 #1.00: Created matched CP_v3 & Tar_v4
