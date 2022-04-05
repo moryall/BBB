@@ -1,7 +1,7 @@
 #!/bin/bash
 #Program Name
 PRGNM="BKUP_tar"
-Ver="5.00"
+Ver="5.01"
 
 #  --- FILE SETUP ---
 #Nearly all done in 'dialog' which will pull this program
@@ -12,13 +12,13 @@ Ver="5.00"
 PATHIN="$FL0$N$SL"
 
 #pathout dynamic
-PATHOUT=$cwd$SL$Wd6
+PATHOUT="$cwd$SL$Wd6"
 
 cd "$cwd"
 if [ -d "$Wd6" ]; then
 echo "" ;
 else
-`mkdir -p $Wd6`;
+`mkdir -p "$Wd6"`;
 fi
 cd "$Wd6" #working directory will be in tar output folder
 echo "Directory changed to:" >> "$debug"
@@ -109,6 +109,7 @@ done
 
 #Change Log:
 
+#5.01: Minor tweaks with quotes around folder creation.
 #5.00: updated for BKUP_RUN / BBB 1.00.00 intial release 
 #4.01: added "complete" message to make log clearer.
 #4.00: added dialog, including checkboxes! added log and debug. FldB options 1-stop add! Complex backup use Options A.  
