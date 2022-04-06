@@ -261,7 +261,7 @@ LstA=()
 LstAx=()
 ChA=()
 #check what program and loop interation
-if [ "$OptTar" -eq "$O" ]; then
+if [ "$OptRS" -eq "$O" ]; then
     if [ "$Lp" -eq "$T" ]; then
 	if [ "$i" -eq "$T" ]; then
 		
@@ -281,8 +281,8 @@ if [ "$OptTar" -eq "$O" ]; then
 	Alpha=""
     fi
 else
-    echo "Pull config ARS - 0xx" >> "$debug"
-    source ./code/config-ARS.sh
+    echo "Pull config ATR - 0xx" >> "$debug"
+    source ./code/config-ATR.sh
     Alpha=""
 fi
 echo "" >> "$debug"
@@ -623,5 +623,6 @@ exit
 #Version_Code.MinorChanges
 
 #Change Log:
+#1.02: Fixed choiceA display options loop logic error. 
 #1.01: Fixed log & debug output for tar choices.
 #1.00: Version Original version
