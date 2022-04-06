@@ -1,7 +1,11 @@
 Version_Code.Sub_Prog.MinorTweaks
 
 ---
-Current: 1.00.01
+1.00.02
+Date: 4/6/2022
+	Fixed error with fld A option choice display with IF loops. 
+---
+1.00.01
 Date: 4/4/2022
 	Minor spelling and function tweaks. Now works as intended.
 ---
