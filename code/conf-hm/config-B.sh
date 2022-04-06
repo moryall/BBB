@@ -3,7 +3,6 @@
 #Config file for folder choices.
 
 #  --- OPTIONS  --- #
-
 #list B. list folders to use; case sensitive spelling
 # !!! Options MUST contain NO spaces. No Circumflex "^"!!!
 FldB=(

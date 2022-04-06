@@ -184,6 +184,13 @@ echo "" | tee -a "$log" >> "$debug"
 
 # -- OPTIONS LOOPS -- #
 
+#Prep LstA
+source ./code/conf-hm/config-A.sh
+for x in ${!KpAR[@]}; do
+LstAR+=("${LstA[@]:${KpAR[$x]}:3}")  #add only selected in KpAR to LstAR
+done
+LstAT=("${LstA[@]}") #make LstA -> AT as new tar list
+
 # - Display check skip - #
 while true; do #3
 
@@ -194,61 +201,42 @@ echo "# Loop number: $i Out of: $Lp" >> "$debug"
 # - Pull Options - #
 #Options A
 #clear any existing (useful for loop)
-FldA=() NumA=() OptA=() LstA=() LstAx=() ChA=() 
+LstA=() OptA=() ChA=()
 
 #check what program and loop interation
-if [ "$OptTar" -eq "$O" ]; then
+if [ "$OptRS" -eq "$O" ]; then
     if [ "$Lp" -eq "$T" ]; then
 	if [ "$i" -eq "$T" ]; then
 		
 		echo "Pull config ATR - 122" >> "$debug"
-		source ./code/conf-hm/config-ATR.sh
+		LstA=("${LstAT[@]}") 
 		Alpha="For tar:"
 		OutA2=()
 		OutB2=()
 	else
 		echo "Pull config ARS - 121" >> "$debug"
-		source ./code/conf-hm/config-ARS.sh
+		LstA=("${LstAR[@]}")
 		Alpha="For rsync:"
 	fi	
     else
 	echo "Pull config ARS - 11x" >> "$debug"
-	source ./code/conf-hm/config-ARS.sh
+	LstA=("${LstAR[@]}")
 	Alpha=""
     fi
 else
-    echo "Pull config ARS - 0xx" >> "$debug"
-    source ./code/conf-hm/config-ARS.sh
+    echo "Pull config ATR - 0xx" >> "$debug"
+    LstA=("${LstAT[@]}")
     Alpha=""
 fi
 echo "" >> "$debug"
-NumA=($(seq 1 1 ${#AN00[@]})) #make an array with 1 through exact number of item
-  for NA1 in ${!NumA[@]}; do #joins numbers and folders into text for options list
-	LstAx+=${NumA[$NA1]}$Sp0${AN00[$NA1]}$Sp3 #Ax for keeping A clear. 
-  done
-OptA=("${LstA[@]}")
 
-<<'FINDBUG'
-echo "Folder A Options:" >> "$debug"
-echo "${LstAx[@]}" >> "$debug"
-echo "Folder A Available:" >> "$debug"
-echo "${LstA[@]}" >> "$debug"
-echo "" >> "$debug"
-FINDBUG
 
 #Options B
 #clear any existing (useful for loop)
-FldB=() NumB=() OptB=() LstB=() ChB=()
+FldB=() NumB=() LstB=() ChB=()
 
 #get Options
 source ./code/conf-hm/config-B.sh
-
-<<'FINDBUG'
-echo "Folder B Options:" >> "$debug"
-echo "${FldB[@]}" >> "$debug"
-echo "" >> "$debug"
-echo "" >> "$debug"	
-FINDBUG
 
 #setup
 NumB=($(seq 1 1 ${#FldB[@]})) #make an array with 1 through exact number of item in Fld
@@ -261,7 +249,7 @@ NumB=($(seq 1 1 ${#FldB[@]})) #make an array with 1 through exact number of item
 cmd=""
 #Start of Dialog A
 cmd=(dialog --title "Backup Options A" --checklist "Select folder options A: \n $Alpha" 30 76 20)
-ChA=$("${cmd[@]}" "${OptA[@]}" 2>&1 >/dev/tty)
+ChA=$("${cmd[@]}" "${LstA[@]}" 2>&1 >/dev/tty)
 if [ "$?" != "0" ]
 then
   dialog --title "Backup Canceled" --msgbox "Backup was canceled at your request." 30 76
@@ -274,9 +262,8 @@ fi
 cmd=""
 
 #Start of Dialog B
-cmd=(dialog --title "Backup Options B" --checklist "Select folder options B: \n $Alpha" 30 76 20) #--separate-output was taken out
-OptB=(${LstB[@]})
-ChB=$("${cmd[@]}" "${OptB[@]}" 2>&1 >/dev/tty)
+cmd=(dialog --title "Backup Options B" --checklist "Select folder options B: \n $Alpha" 30 76 20)
+ChB=$("${cmd[@]}" $LstB 2>&1 >/dev/tty)
 if [ "$?" != "0" ]
 then
   dialog --title "Backup Canceled" --msgbox "Backup was canceled at your request." 30 76
@@ -310,13 +297,13 @@ for x in {0..3};do #3.2 #Run 4 times (once per input/output)
 	case $x in
 		0) 
 		   OUT=$OutA1
-		   FLD=("${AN00[@]}") ;;
+		   FLD=("${FldA[@]}") ;;
 		1) 
 		   OUT=$OutB1
 		   FLD=("${FldB[@]}") ;;
 		2)
 		   OUT=$OutA2
-		   FLD=("${AN00[@]}") ;;
+		   FLD=("${FldA[@]}") ;;
 		3) 
 		   OUT=$OutB2
 		   FLD=("${FldB[@]}") ;;
@@ -382,7 +369,7 @@ Confirm or press [No] to try again." 30 76
 return_value=$? # Get dialog's exit status
 case $return_value in # Act on the exit status
   $DIALOG_OK)
-  break #this is what triggers end to the display check while loop
+  break #3x this is what triggers end to the display check while loop
   ;;
   $DIALOG_CANCEL)
   c=$(($c + $O))
@@ -486,6 +473,7 @@ fi
 #Version_Code.MinorChanges
 
 #Change Log:
+#4.00: Simplified FldA & FldB; added unified config-A w/ easier item removal for RS
 #3.00: Added loop for variable maker. Added better loop numbering. Cleaners up layout.
 #2.00: Shortened due to new directory structure & master.sh 
 #1.01: Fixed log & debug output for tar choices.

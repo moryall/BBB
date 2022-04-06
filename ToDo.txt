@@ -28,6 +28,11 @@ Wishlist:
 		>New config for drives labels, mntpoint, & uuid
 		>Write computer side setup instructions
 		>Darcy Double Check, search for file with uuid on location
+				str="ABCD"
+				content=$(cat test.txt)
+				if [ "$str" == "$content" ];then
+				    # send your email
+				fi
 		>if found provide list for choices for use in new dialog
 
 ) add proper Redo and Cancel options, with loops
