@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Config file for folder choices.
+#Config file for folder choices B. Used for repeatable folders in user's home folder.
 
 #  --- OPTIONS  --- #
 #list B. list folders to use; case sensitive spelling

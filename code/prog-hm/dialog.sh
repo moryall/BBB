@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# --- DIALOG PROGRAM --- #
+##### --- DIALOG PROGRAM --- #####
+
+####  --- INTRO --- #### 
 
 # Define the dialog exit status codes
 : ${DIALOG_OK=0}
@@ -10,16 +12,13 @@
 : ${DIALOG_ITEM_HELP=4}
 : ${DIALOG_ESC=255}
  
- 
-#  -- INTRO -- # 
-# - Dialog 1 - #
-#turing location check
-dialog --yes-label "Continue" --no-label "Cancel" --title "Backup Intro 1" --yesno  "This is: $PRGNM version $Ver\n
+
+### -- Dialog 1 -- ###
+# - Verify Location - #
+dialog --yes-label "Continue" --no-label "Cancel" --title "Backup Intro 1" --yesno  "This is: $PRGNM version $Ver \n 
 This program will create a backup copy of your files. \n
-You will be provided with choices for compression or not.\n
-\n
-WARNING! Please be sure the following is the desired output location.\n
-\n
+You will be provided with choices for compression or not.\n \n
+WARNING! Please be sure the following is the desired output location.\n \n
 File location: \n
 $cwd" 22 76 
 return_value=$? # Get dialog's exit status
@@ -28,31 +27,31 @@ case $return_value in # Act on the exit status
   $DIALOG_CANCEL)
   	clear
 	echo "Canceled on Source Check 1" | tee -a "$log" | tee -a "$debug"
-	sleep 2s 
 	exit
 	;;
 esac
 
 
-
-
-# - Dialog 2 - #
-
-# - Name Choice - #
+### -- Dialog 2 -- ###
+# - Verify Name - #
 while true; do #1
 #turing user name check
-dialog --no-label "Change" --title "Backup Intro 2" --yesno  "Is the following the correct user name for back up: \n
+dialog --extra-button --extra-label "Change" --title "Backup Intro 2" --yesno  "Is the following the correct user name for back up: \n
 $N" 30 76 
 return_value=$? # Get dialog's exit status
 case $return_value in # Act on the exit status
   $DIALOG_OK) 
-  	break
-  	;;
+  	break ;;
   $DIALOG_CANCEL)
-  	TmpUser="tmpUser.txt" #specifcy temp file
+  	clear
+	echo "Canceled on Source Check 2a" | tee -a "$log" | tee -a "$debug"
+	exit
+	;;
+  $DIALOG_EXTRA)
+  	TmpUser="tmpUser.txt" #specifcy temp file for user name
   	dialog --clear --title "Backup User Correction" --inputbox "Please enter the correct user name or press cancel to exit." 30 76 2>$TmpUser
-	sub1=$? # Get dialog's exit status
-	case $sub1 in # Act on the exit status
+	return_value2=$? # Get dialog's exit status
+	case $return_value2 in # Act on the exit status
 		$DIALOG_OK) 
 		N=$(<$TmpUser) #this writes the temp file to N
 		rm $TmpUser #remove tempfile
@@ -61,7 +60,7 @@ case $return_value in # Act on the exit status
 		;;
 		$DIALOG_CANCEL)
 		clear
-		echo "Canceled on Source Check 2" | tee -a "$log" | tee -a "$debug"
+		echo "Canceled on Source Check 2b" | tee -a "$log" | tee -a "$debug"
 		rm $TmpUser #clear temp file on cancel
 		exit
 		;;
@@ -71,62 +70,63 @@ done #1 Name choice confirm while loop ends here
 
 
 
+####  --- PROGRAMS & FOLDERS --- #### 
+RS_Options="$RSYNC_OPTIONS"
 
 
-
-
-# - Dialog 3 - #
-# - Program Choice - #
-while true; do #2
-while true; do #2.1
-#Choice of program
+### -- Dialog 3 -- ###
+# - Program choice - #
+while true; do #2 	Creation of Var after coice
+while true; do #2.1	Choice Loop (must choose or redo)
+#Choice of program 1
 cmd=(dialog --title "Backup Program Select" --radiolist "Select a backup program:" 30 76 20)
-Pg=(
+PgOpt=(
 	1 "$PG01" off 
 	2 "$PG02" off
 	3 "$PG03" off
 	4 "$PG04" off
 	)
-Pg=$("${cmd[@]}" "${Pg[@]}" 2>&1 >/dev/tty)
-if [ "$?" != "0" ]; then
-  dialog --title "Backup Canceled" --msgbox "Backup was canceled at your request." 30 76
-  clear
-  echo "Canceled on Program Select" | tee -a "$log" >> "$debug"
-  exit
-else
-echo ""
-fi
+Pg=$("${cmd[@]}" "${PgOpt[@]}" 2>&1 >/dev/tty)
+return_value=$?
+case $return_value in
+ 	$DIALOG_CANCEL)
+  	   dialog --title "Backup Canceled" --msgbox "Backup was canceled at your request." 30 76
+  	   clear
+  	   echo "Canceled on Program Select" | tee -a "$log" >> "$debug"
+  	   exit ;;
+	$DIALOG_OK) 
+  	   : ;;
+esac
 if [ -z "$Pg" ]; then
   dialog --ok-label "Redo" --title "No Program Selected" --msgbox "You must select a program." 30 76
 else
 break #2.1x
 fi
 done #2.1
-Pg1=$Pg
 
 #interpret choice
-for Pg1 in $Pg1; do #2.2
-    case $Pg1 in
+for Pg in $Pg; do #2.2
+    case $Pg in
         1)
-            PgD="$Pg1 $PG01"
+            PgD="$Pg $PG01"
             OptRS=1 #binay 0=no 1=yes for choice of rsync
             OptTar=0 #y/n for tar
             Lp=1 #number of times through folder options loop
             ;;
         2)
-            PgD="$Pg1 $PG02"
+            PgD="$Pg $PG02"
             OptRS=0
             OptTar=1
             Lp=1  
             ;;
         3)
-            PgD="$Pg1 $PG03"
+            PgD="$Pg $PG03"
             OptRS=1
             OptTar=1
             Lp=1  
             ;;
         4)
-            PgD="$Pg1 $PG04"
+            PgD="$Pg $PG04"
             OptRS=1
             OptTar=1
             Lp=2
@@ -134,47 +134,72 @@ for Pg1 in $Pg1; do #2.2
     esac
 done #2.2
 
-#Chose if RS to use --delete tag added
-if [ "$OptRS" -eq "$O" ]; then
-	dialog --title "Rsync Option" --yesno "Would you like to turn on --delete" 30 76 
+
+# - Rsync options - #
+#Check if even running RS 
+if [ "$OptRS" -eq "$O" ]; then #2.3a
+	while true; do #2.3.1
+	dialog --cancel-label "No" --ok-label "Yes" --extra-button --extra-label "Change" --title "Rsync Options Choice" --yesno "Would you like to turn on the following rsync options: \n
+	\"$RS_Options\"" 30 76 
 	return_value=$? # Get dialog's exit status
 	case $return_value in # Act on the exit status
 	  $DIALOG_OK) 
-	  	extra="--delete "
-	  	RSoptDialog="rsync --delete option is on."
-	  	;;
+	  	RSoptDialog="rsync \"$RS_Options\" option(s): ON."
+	  	RS_Opt_ON=1
+	  	break ;; #2.3.1x
 	  $DIALOG_CANCEL)
-	  	extra=""
-	  	RSoptDialog="rsync --delete option is off."
-		;;
+	  	RSoptDialog="rsync option(s): OFF."
+	  	RS_Opt_ON=0
+	  	break ;; #2.3.1x
+	  $DIALOG_EXTRA)
+	  	TmpRS="tmpRS.txt" #specifcy temp file for RS_Options
+	  	dialog --title "Rsync Options Set" --inputbox "Please enter desired options ending with a space" 30 76 2>$TmpRS
+		return_value2=$? # Get dialog's exit status
+		case $return_value2 in # Act on the exit status
+			$DIALOG_OK) 
+			RS_Options=$(<$TmpRS) #this writes the temp file to variable
+			rm $TmpRS #remove tempfile
+			: ;;#repeats 2.3.1
+			$DIALOG_CANCEL)
+			clear
+			rm $TmpRS #clear temp file on cancel
+			echo "Canceled on RS Options" | tee -a "$log" | tee -a "$debug"
+			exit ;;
+		esac
 	esac
-else
-   	echo ""
-   	extra=""
-   	RSoptDialog=""
-fi	
-cmd=""
+	done #2.3.1
+   else #2.3b
+	echo "" | tee -a "$log" >> "$debug"
+	RSoptDialog="Option(s): OFF."
+   	RS_Opt_ON=0
+fi #2.3
 
-#display choice
-dialog --yes-label "Continue" --no-label "Redo" --title "Backup Program Choice" --yesno  "You have selected to run the following:\n
+# - Display Choices - #
+dialog --extra-button --extra-label "Redo" --yes-label "Continue" --no-label "Cancel" --title "Backup Program Choice" --yesno  "You have selected to run the following: \n
 $PgD \n
-$RSoptDialog \n
-\n
-You will be provided with options next." 30 76 
+$RSoptDialog \n \n
+You will be provided with folder choices next." 30 76 
 return_value=$? # Get dialog's exit status
 case $return_value in # Act on the exit status
   $DIALOG_OK) 
-  	break #break 2
-  	;;
+  	break ;; #2x
+  $DIALOG_EXTRA)
+  	: ;; #repeats loop 2
   $DIALOG_CANCEL)
-  	:
-  	;;
+  	echo "Canceled on Program Choice Confirm" | tee -a "$log" | tee -a "$debug"
+	exit ;;
 esac
-cmd=""
-done #end off choice loop 2
+done #2
+#confirm options
+if [ "$RS_Opt_ON" -eq "$Z" ]; then 
+	RS_Options=""
+   else
+   	: 
+fi
 
 echo "Program Choice: $PgD"  | tee -a "$log" >> "$debug"
-echo "RS: $OptRS; Extra: $extra.  Tar: $OptTar." | tee -a "$log" >> "$debug"
+echo "RS: $OptRS:$RS_OptON ; Tar: $OptTar." | tee -a "$log" >> "$debug"
+echo "RS Options: \"$RS_Options\"" | tee -a "$log" >> "$debug"
 echo "Number of loops: $Lp" >> "$debug"
 echo "---" | tee -a "$log" >> "$debug"
 echo "" | tee -a "$log" >> "$debug"
@@ -182,7 +207,8 @@ echo "" | tee -a "$log" >> "$debug"
 
 
 
-# -- OPTIONS LOOPS -- #
+### -- Dialog 4 -- ####
+#Options Loops
 
 #Prep LstA
 source ./code/conf-hm/config-A.sh
@@ -246,7 +272,7 @@ NumB=($(seq 1 1 ${#FldB[@]})) #make an array with 1 through exact number of item
 
 
 # - Options Dialogs - #
-cmd=""
+cmd=()
 #Start of Dialog A
 cmd=(dialog --title "Backup Options A" --checklist "Select folder options A: \n $Alpha" 30 76 20)
 ChA=$("${cmd[@]}" "${LstA[@]}" 2>&1 >/dev/tty)
@@ -424,7 +450,7 @@ echo "" | tee -a "$log" >> "$debug"
 
 
 
-# --- PROGRAMS --- #
+#### --- PROGRAMS --- ####
 #Grab Hiddens in Prep for programs
 source ./code/conf-hm/config-HID.sh
 source ./code/conf-hm/config-GM.sh
@@ -473,6 +499,7 @@ fi
 #Version_Code.MinorChanges
 
 #Change Log:
+#5.00: Simplified variables. Cleaned dialog loops 1-3. Added write-in option for rsync settings. Added extra "Redo" label and allowed for Cancel. 
 #4.00: Simplified FldA & FldB; added unified config-A w/ easier item removal for RS
 #3.00: Added loop for variable maker. Added better loop numbering. Cleaners up layout.
 #2.00: Shortened due to new directory structure & master.sh 

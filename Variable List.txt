@@ -1,0 +1,234 @@
+File Descriptions:
+
+##### --- ./code/com.sh --- #####
+## -- Description -- ##
+A list of common vairables to remain constant accross all my programs.
+
+## -- Variables -- ##
+#constants
+Z=0 #a variable for Zero
+O=1 #a variable for One
+T=2 #a variable for Two
+
+#shorts
+SL="/" #slash
+Sp0=" " #Blank Space
+Sp1=' "' #dialog's option spacer
+Sp2='" off ' #dialog's option spacer
+Sp3="_" #used many places, especially file names
+Sp4="*" #used when wildcard is needed
+Sp5="^" #used as a spacer in variable split/joiner (due to uncommon nature)
+
+#extensions
+Ext1=".txt" 
+Ext2=".tgz"
+
+
+
+##### --- ./code/var.sh --- #####
+## -- Description -- ##
+A list of variables used across BBB.
+
+## -- Variables -- ##
+#variables with starting value
+c=0
+
+#words
+Wd1="Backup" #Used to make tar files
+Wd2="Log" #Used to make log location/file
+Wd3="Debug" #Used to make debug location/file
+Wd4="tmp" Used to make location/file
+Wd5="rsync" #word used for name of rsync folder
+Wd6="tar" #word used for name of tar folder
+
+#folders
+FL0="/home/"
+FL1="logs"
+FL2="temp"
+FL3="code"
+
+#programs
+Prog00="master.sh"
+Prog01="dialog.sh"
+
+#program choice
+PG01="rsync"
+PG02="tar"
+PG03="both - same folders"
+PG04="BOTH - different folders"
+
+#program default option (must end with a space!
+RSYNC_OPTIONS="--delete "
+
+#meta
+PRGNM="BBB"
+Ver="x2.00.00-02"
+
+
+
+##### --- ./code/conf-hm/config-A.sh --- #####
+## -- Description -- ##
+Config file for folder choices A. Used for unique or complex folders. Can't use Circumflexes.
+
+## -- Variables -- ##
+FldA=("Folder A" "Folder B" "...") #Names of folders (only used for display)
+LstA=(1 "\"${FldA[0]}\"" off 2 "\"${FldA[1]}\"" off ...) #Used for Dialog Choices
+KpAR=("0" "3" ...) #Used to make a limited selections of LstA for tar.
+
+
+
+##### --- ./code/conf-hm/config-B.sh --- #####
+## -- Description -- ##
+Config file for folder choices B. Used for repeatable folders in user's home folder. Can't use Circumflexes.
+
+## -- Variables -- ##
+FldB=("Folder A" "Folder B" "...") #Names of folders (as written, case sensitive)
+
+
+
+##### --- ./code/conf-hm/config-GM.sh --- #####
+## -- Description -- ##
+Config file for repeatable folder in user's home folder. Can't use Circumflexes.
+
+## -- Variables -- ##
+GameAr=("Folder A" "Folder B" "...") #Names of folders (as written, case sensitive)
+
+
+
+##### --- ./code/conf-hm/config-HID.sh --- #####
+## -- Description -- ##
+Config file for repeatable folder in user's home folder. Can't use Circumflexes.
+
+## -- Variables -- ##
+HID=("Folder A" "Folder B" "...") #Names of folders (as written, case sensitive)
+
+
+
+##### --- ./BKUP-RUN.sh --- #####
+## -- Description -- ##
+Small Utility to: 1) ensure dependencies, 2) get sudo access for entire rest of script, 3) to get basic information about user and location to pass to main program via temp files, 4) remove temp files.
+
+## -- Source -- ##
+#pulls
+source ./code/com.sh
+source ./code/var.sh
+#opens
+source ./code/prog-cm/versionCheck.sh
+#runs
+sudo bash ./$Fl3$SL$PG00 (i.e. ./code/master.sh)
+
+## -- Variables -- ##
+cwd=${PWD%/*} #grabs one level up for Constant Working Directory
+srcd=$(pwd) #SouRCe Directory for shorter refernce to logs and code
+N=$(whoami) #grabs user name while non-sudo
+DC=$(date +%Y-%m-%d) #create Date Code for files (persistent through batch)
+
+## -- Temp Files -- ##
+tmpA="$srcd$SL$FL2$SL$Wd4-cwd$Ext1" #holds Constant Working Directory
+tmpB="$srcd$SL$FL2$SL$Wd4-srcd$Ext1" #holds SouRCe Directory
+tmpC="$srcd$SL$FL2$SL$Wd4-N$Ext1" #holds user name
+tmpD="$srcd$SL$FL2$SL$Wd4-DC$Ext1" #holds Date Code
+
+
+
+##### --- ./code/prog-cm/versionCheck.shh --- #####
+## -- Description -- ##
+A short program to check versions of dependant programs. Utilized --version and program specific cutting to compare >= version written with. Will stop at first unmet.
+
+## -- Variables -- ##
+depName[x] # an array containing dependency names. Primarily for error message.
+check[x]="${<variable>:<start read>:<read count>}" #array makes value to check.
+comp[x]="<specified version #>" #array with value to compare against
+bcvc=$(bc --version) #arbitrary precision calculator language version
+bshvc=$(bash --version) #bash version
+dvc=$(dialog --version) #dialog version
+rvc=$(rsync --version) #rsync version
+tvc=$(tar --version) #tar version
+
+
+
+##### --- ./code/master.sh --- #####
+## -- Description -- ##
+Contains the main shell window for sub-programs in sudo access. Acomplishes: 1) Sizing the screen, 2) loading in var & com variables, 3) Reload temp variables from prior to sudo, 4) Make log/debug files, 5) pull main code. 
+
+## -- Source -- ##
+#pulls
+source ./code/com.sh
+source ./code/var.sh
+temp files: i.e. ./temp/tmp<name>.txt
+#opens
+source ./code/prog-hm/dialog.sh
+
+## -- Variables -- ##
+#Redeclares those from BKUP-RUN
+log=$srcd$SL$FL1$SL$DC$Sp3$Wd2 #should be $srcd/logs/yyyy-mm-dd_Log
+debug=$srcd$SL$FL1$SL$DC$Sp3$Wd3 #should be $srcd/logs/yyyy-mm-dd_Debug
+
+
+
+##### --- ./code/dialog.sh --- #####
+## -- Description -- ##
+The main program responsible for: 1) generating GUI, 2) Collects options needed for tasks.
+
+## -- Source -- ##
+#pulls
+source ./code/com.sh (via ./code/master.sh)
+source ./code/var.sh (via ./code/master.sh)
+temp files: i.e. ./temp/tmp<name>.txt (via ./code/master.sh)
+source ./code/conf-hm/config-A.sh
+source ./code/conf-hm/config-B.sh
+source ./code/conf-hm/config-HID.sh
+source ./code/conf-hm/config-GM.sh
+#opens
+source ./code/prog-hm/rsync.sh
+source ./code/prog-hm/tar.sh
+
+## -- Variables -- ##
+#dialog exit status codes
+: ${DIALOG_OK=0}
+: ${DIALOG_CANCEL=1}
+: ${DIALOG_HELP=2}
+: ${DIALOG_EXTRA=3}
+: ${DIALOG_ITEM_HELP=4}
+: ${DIALOG_ESC=255}
+? #the exit code for any command. Best results, use umediately after command. 
+return_value=$? #recurring return value variable. 
+cmd=(dialog ...) #variable used to write part of a dialog before running it
+
+# - dialogs - #
+#Program Choice
+PgOpt=(1 "$PG0x" off ...) #array with labels for program choices.
+Pg=$(...) #run fully compiled dialog command, puts output into var
+PgD="# <PG0x Title>" #Program Decision.
+OptRS #binay 0=no 1=yes for choice of rsync
+OptTar=0 #binay 0=no 1=yes for choice of tar
+Lp #number of times through folder options loop
+#RS Options
+RS_Options #defualt RSYNC_OPTIONS (from var.sh) can be edited, must end in space. 
+$extra (^former)
+RS_Opt_ON= #binay 0=off 1=on for choice of options being on or off
+
+
+## -- Temp Files -- ##
+TmpUser="tmpUser.txt" #specifcy temp file for user name
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

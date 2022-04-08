@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Config file for folder choices.
+#Config file for repeatable folder in user's home folder.
 
 #  --- OPTIONS  --- #
 #List of Folder to copy for games (actual variable array)
