@@ -1,18 +1,14 @@
 #!/bin/bash
 #Program Name
 PRGNM="BKUP_rsycn"
-Ver="2.02"
+Ver="2.03"
 
 #  --- FILE SETUP ---
 #Nearly all done in 'dialog' which will pull this program
 
 # - PATH - #
-#pathin with usr name
-#should be dynamic equivilant to: PATHIN=/home/michael/
-PATHIN="$FL0$N$SL"
-
-#pathout dynamic
-PATHOUT="$cwd$SL$Wd5"
+PATHIN="$SL$FL0$SL$N$SL" #should be dynamic equivilant to: PATHIN=/home/user/
+PATHOUT="$cwd$SL$Wd5" #pathout dynamic
 
 if [ -d "$cwd$SL$Wd5" ]; then
 echo "" ;
@@ -40,7 +36,7 @@ do
 			E="$PATHIN.local/share/Steam"
 			#echo "Input:$INPUT  Output:$OUTPUT" | tee -a "$debug"
 			echo "mkdir -p $OUTPUT"
-			echo "rsync -aEhi --progress --exclude \'$E\' $extra$INPUT $OUTPUT" | tee -a "$debug"
+			echo "rsync -aEhi --progress --exclude \'$E\' $RS_Options$INPUT $OUTPUT" | tee -a "$debug"
 		done
 		echo "Home Hidden Folders Complete - $(date)" | tee -a "$log" | tee -a "$debug"
 		INPUT=()
@@ -53,7 +49,7 @@ do
 		INPUT="$PATHIN"
 		OUTPUT="$PATHOUT"
 		#echo "Input:$INPUT  Output:$OUTPUT" | tee -a "$debug"
-		echo "rsync -aEhi --exclude='*/' --progress $extra$INPUT $OUTPUT" | tee -a "$debug"
+		echo "rsync -aEhi --exclude='*/' --progress $RS_Options$INPUT $OUTPUT" | tee -a "$debug"
 		echo "Home Visible Files Complete - $(date)" | tee -a "$log" | tee -a "$debug"
 		INPUT=()
 		OUTPUT=()
@@ -68,7 +64,7 @@ do
 			OUTPUT="$PATHOUT"
 			#echo "Input:$INPUT  Output:$OUTPUT" | tee -a "$debug"
 			echo "mkdir -p $OUTPUT"
-			echo "rsync -aEhi --progress $extra$INPUT $OUTPUT" | tee -a "$debug"
+			echo "rsync -aEhi --progress $RS_Options$INPUT $OUTPUT" | tee -a "$debug"
 		done
 		echo "Games Complete - $(date)" | tee -a "$log" | tee -a "$debug"
 		INPUT=()
@@ -87,7 +83,7 @@ for i5 in ${!CFB1[@]}; do
 	echo "--Backing up ${CFB1[i5]}" | tee -a "$log" | tee -a "$debug"
 	INPUT="$PATHIN${CFB1[i5]}"
 	OUTPUT="$PATHOUT"
-	echo "rsync -aEhi --progress $extra$INPUT $OUTPUT" | tee -a "$debug"
+	echo "rsync -aEhi --progress $RS_Options$INPUT $OUTPUT" | tee -a "$debug"
 	echo "${CFB1[i5]} is Complete - $(date)" | tee -a "$log" | tee -a "$debug"
 	INPUT=()
 	OUTPUT=()
@@ -99,6 +95,7 @@ done
 #Version_Code.MinorChanges
 
 #Change Log:
+#2.03: adjusted variables for overhaul of diaglog.
 #2.02: fixed erroneous folder creation. Fixed lack of parent folders for hidden & games.
 #2.01: fixed rsync bug for A-2. Now it keeps directory structure for all hidden folders being backed up.
 #2.00: updated for BKUP_RUN / BBB 1.00.00 intial release.

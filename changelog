@@ -1,6 +1,14 @@
 Version_Code.Sub_Prog.MinorTweaks
 
 ---
+x2.00.00-03
+Date: 4/8/2022
+	Completed var/com split. Began code review and simplification. Completed code review. 
+---
+x2.00.00-03
+Date: 4/7/2022
+	Completed var/com split. Began code review and simplification. Ended on Dialog 3. Added rsync options edit. 
+---
 x2.00.00-02
 Date: 4/5/2022
 	Fixed Folder A nonsense, now recombined, optional filtered as well as misc code cleaning. 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Config file for folder choices.
+#Config file for folder choices A. Used for unique or complex folders.
 
 #  --- OPTIONS  --- #
 #!!!!!! Check your Choices & Program Settings if you change these!!!!!!!
