@@ -31,7 +31,9 @@ A list of variables used across BBB.
 
 ## -- Variables -- ##
 #variables with starting value
-c=0
+f_COUNT=0 #counter for repeats of folder select loop
+p_COUNT=0 #counter for repeats of program and folders loops
+n_COUNT=0 #counter for repeats of name, program, folder loops
 
 #words
 Wd1="Backup" #Used to make tar files
@@ -171,10 +173,11 @@ debug=$srcd$SL$FL1$SL$DC$Sp3$Wd3 #should be $srcd/logs/yyyy-mm-dd_Debug
 The main program responsible for: 1) generating GUI, 2) Collects options needed for tasks.
 
 ## -- Source -- ##
+#uses (via ./code/master.sh)
+source ./code/com.sh
+source ./code/var.sh
+temp files: i.e. ./temp/tmp<name>.txt
 #pulls
-source ./code/com.sh (via ./code/master.sh)
-source ./code/var.sh (via ./code/master.sh)
-temp files: i.e. ./temp/tmp<name>.txt (via ./code/master.sh)
 source ./code/conf-hm/config-A.sh
 source ./code/conf-hm/config-B.sh
 source ./code/conf-hm/config-HID.sh
@@ -208,22 +211,118 @@ RS_Options #defualt RSYNC_OPTIONS (from var.sh) can be edited, must end in space
 $extra (^former)
 RS_Opt_ON= #binay 0=off 1=on for choice of options being on or off
 
+#Folder Options
+LstAR #filtered list of LstA via limiter KpAR, to be used to rsync
+LstAT #completed copy of LstA for use with tar
+LstA #redeclated in loop as AR or AT depending on choice 
+OPTION_TXT #states message regarding which folder options loop selection is for.
+$Alpha (former ^)
+NumB #A 1-x generated sequence for entries in FldB to make LstB
+LstB #Folders and numbers for display in options
+ChA #the selected choices of FldA (all numerical space seperated)
+ChB #the selected choices of FldB (all numerical space seperated)
+OutA1 #The output of ChA during loop 1 (all numerical space seperated)
+OutB1 #The output of ChB during loop 1 (all numerical space seperated)
+OutA2 #The output of ChA during loop 2 (all numerical space seperated)
+OutB2 #The output of ChB during loop 2 (all numerical space seperated)
+
+#Variable maker (prepared variables for display and use.
+OUT #depending on itteration one of the OutA/B;1/2
+FLD #depending on itteration corresponding FldA/B
+Var1 #temp array; choice #s as seperate array items
+Var2 #temp string; choice number, space, folder, circumflex (for seperation uses $Sp5)
+Var3 #temp array; choice number, space, folder
+Var4 #temp string; folder, circumflex
+Var5 #temp array; folder per array item.
+PRINT #temp array; copy of Var3 as per line for display. 
+TRASH #trash variable when Var5 is not used.
+PRINTA1 #dependent on itteration; permanent $PRINT for A1.
+PRINTB1 #dependent on itteration; permanent $PRINT for B1.
+PRINTA2 #dependent on itteration; permanent $PRINT for A2.
+PRINTB2 #dependent on itteration; permanent $PRINT for B2.
+CFB1 #Permanent copy of Var5 for FldB choices on loop one - to be used in rsync. 
+CFB2 #Permanent copy of Var5 for FldB choices on loop two - to be used in tar. 
+
+#Confirmation
+REDO_OPTIONS #array with possible restart points
+REDO_CH #numerical choice of redo points
+
+#programs
+PATHIN #Used in both tar and rsync cleared for clarity
+PATHOUT #Used in both tar and rsync cleared for clarity
+INPUT #used slightly differently in rsync and tar; cleared between programs
+OUTPUT #used slightly differently in rsync and tar; cleared between programs
 
 ## -- Temp Files -- ##
 TmpUser="tmpUser.txt" #specifcy temp file for user name
 
 
 
+##### --- ./code/prog-hm/rsync.sh --- #####
+## -- Description -- ##
+The main program for conducting rsync backups. Rsync runs from folder location with full file paths in & out.
+
+## -- Source -- ##
+#uses (via ./code/dialog.sh via ./code/master.sh)
+source ./code/com.sh
+source ./code/var.sh
+temp files: i.e. ./temp/tmp<name>.txt
+#uses (via ./code/dialog.sh)
+source ./code/conf-hm/config-A.sh
+source ./code/conf-hm/config-B.sh
+source ./code/conf-hm/config-HID.sh
+source ./code/conf-hm/config-GM.sh
+
+## -- Inputs -- ##
+$OutA1 #see dialog.sh
+$OutB1 #see dialog.sh
+$HID #see config-HID.sh
+$GameAR #see config-GM.sh
+$RS_Options #see dialog.sh
+$CFB1 #see dialog.sh
+
+## -- Variables -- ##
+PRGNM="BKUP_rsycn" #name of sub-program
+Ver="x.xx" #sub-program version
+PATHIN="$SL$FL0$SL$N$SL" #/home/user/
+PATHOUT="$cwd$SL$Wd5" #$cwd/rsync ($Wd5 from var.sh; no / at end)
+INPUT #variable string made with $PATHIN as needed by the settings
+OUTPUT #variable string made with $PATHOUT as needed by the settings
+E #Exclusion criteria for FldA choices set in file.
 
 
 
+##### --- ./code/prog-hm/tar.sh --- #####
+## -- Description -- ##
+The main program for conducting tar backups. Tar runs from destination location with full file paths in and must have working directory be in destination.
 
+## -- Source -- ##
+#uses (via ./code/dialog.sh via ./code/master.sh)
+source ./code/com.sh
+source ./code/var.sh
+temp files: i.e. ./temp/tmp<name>.txt
+#uses (via ./code/dialog.sh)
+source ./code/conf-hm/config-A.sh
+source ./code/conf-hm/config-B.sh
+source ./code/conf-hm/config-HID.sh
+source ./code/conf-hm/config-GM.sh
 
+## -- Inputs -- ##
+$OutA2 #see dialog.sh
+$OutB2 #see dialog.sh
+$HID #see config-HID.sh
+$GameAR #see config-GM.sh
+$CFB2 #see dialog.sh
 
-
-
-
-
+## -- Variables -- ##
+PRGNM="BKUP_tar" #name of sub-program
+Ver="x.xx" #sub-program version
+PATHIN="$SL$FL0$SL$N$SL" #/home/user/
+PATHOUT="$cwd$SL$Wd6" #$cwd/tar ($Wd6 from var.sh; no / at end)
+INPUT #variable string made with $PATHIN as needed by the settings
+OUTPUT #used for log file description of work
+TITLE #variable titles for file name
+OP_LOC #variable OutPut LOCation
 
 
 

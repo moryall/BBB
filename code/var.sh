@@ -4,7 +4,9 @@
 
 #  --- FILE SETUP --- #
 #variables with starting value
-c=0
+f_COUNT=0 #counter for repeats of folder select loops
+p_COUNT=0 #counter for repeats of program and folders loops
+n_COUNT=0 #counter for repeats of name, program, folder loops
 
 #words
 Wd1="Backup" #Used to make tar files
@@ -15,7 +17,7 @@ Wd5="rsync" #word used for name of rsync folder
 Wd6="tar" #word used for name of tar folder
 
 #folders
-FL0="/home/"
+FL0="home" #"/home/"
 FL1="logs"
 FL2="temp"
 FL3="code"
