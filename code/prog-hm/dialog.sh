@@ -471,54 +471,16 @@ case $return_value in # Act on the exit status
   $DIALOG_CANCEL)
   clear
   echo "Final Confirmation Cancelation" | tee -a "$log" | tee -a "$debug"
+  #remove color scheme for dialog
+  if [ ! -f /etc/dialogrc__TEMPBKUP__ ]; then
+	rm /etc/dialogrc
+  else
+	rm /etc/dialogrc
+	mv /etc/dialogrc__TEMPBKUP__ /etc/dialogrc
+  fi
   exit
   ;;
 esac
-
-#### --- PROGRAMS --- ####
-#Grab in Prep for programs using A options
-source ./code/conf-hm/config-HID.sh
-source ./code/conf-hm/config-GM.sh
-
-clear #So you can see the text on the screen
-echo "#########################" | tee -a "$log" | tee -a "$debug"
-echo " -- Main Programs -- " | tee -a "$log" | tee -a "$debug"
-
-#options
-if [ "$OptRS" -eq "$O" ]; then
-	echo "" | tee -a "$log" | tee -a "$debug"
-	echo "Starting rsync..."
-	printf "Start rsync - $(date)" | tee -a "$log" >> "$debug"
-	echo "" | tee -a "$log" | tee -a "$debug"
-	source ./code/prog-hm/rsync.sh
-	printf "Completed rsync - $(date)" | tee -a "$log" >> "$debug"
-	echo "" | tee -a "$log" | tee -a "$debug"
-  elif [ "$OptRS" -eq "$Z" ]; then
-  	echo ""
-  else
-  	echo "No program selected - see debug log" | tee -a "$log" | tee -a "$debug"
-fi
-PATHIN=() PATHOUT=() INPUT=() OUTPUT=() #clear between programs
-
-echo "" | tee -a "$log" >> "$debug"
-echo "" | tee -a "$log" >> "$debug"
-echo "__________________________" | tee -a "$log" >> "$debug"
-echo "" | tee -a "$log" >> "$debug"
-echo "" | tee -a "$log" >> "$debug"
-if [ "$OptTar" -eq "$O" ]; then
-	echo "" | tee -a "$log" | tee -a "$debug"
-	echo "Starting tar..." | tee -a "$log" | tee -a "$debug"
-	printf "Start tar - $(date)" | tee -a "$log" >> "$debug"
-	echo "" | tee -a "$log" | tee -a "$debug"
-	source ./code/prog-hm/tar.sh
-	printf "Completed tar - $(date)" | tee -a "$log" >> "$debug"
-	echo "" | tee -a "$log" | tee -a "$debug"
-  elif [ "$OptTar" -eq "$Z" ]; then
-  	echo ""
-  else
-  	echo "No program selected - see debug log" | tee -a "$log" | tee -a "$debug"
-fi
-
 
 #Version_1.00
 #Version_Code.MinorChanges

@@ -133,7 +133,7 @@ tmpD="$srcd$SL$FL2$SL$Wd4-DC$Ext1" #holds Date Code
 
 
 
-##### --- ./code/prog-cm/versionCheck.shh --- #####
+##### --- ./code/prog-cm/versionCheck.sh --- #####
 ## -- Description -- ##
 A short program to check versions of dependant programs. Utilized --version and program specific cutting to compare >= version written with. Will stop at first unmet.
 
@@ -151,7 +151,7 @@ tvc=$(tar --version) #tar version
 
 ##### --- ./code/master.sh --- #####
 ## -- Description -- ##
-Contains the main shell window for sub-programs in sudo access. Acomplishes: 1) Sizing the screen, 2) loading in var & com variables, 3) Reload temp variables from prior to sudo, 4) Make log/debug files, 5) pull main code. 
+Contains the main shell window for sub-programs in sudo access. Acomplishes: 1) Sizing the screen, 2) loading in var & com variables, 3) Reload temp variables from prior to sudo, 4) Make log/debug files, 5) pull main sub-programs. 
 
 ## -- Source -- ##
 #pulls
@@ -160,11 +160,27 @@ source ./code/var.sh
 temp files: i.e. ./temp/tmp<name>.txt
 #opens
 source ./code/prog-hm/dialog.sh
+source ./code/conf-hm/config-HID.sh
+source ./code/conf-hm/config-GM.sh
+source ./code/prog-hm/rsync.sh
+source ./code/prog-hm/tar.sh
 
 ## -- Variables -- ##
 #Redeclares those from BKUP-RUN
 log=$srcd$SL$FL1$SL$DC$Sp3$Wd2 #should be $srcd/logs/yyyy-mm-dd_Log
 debug=$srcd$SL$FL1$SL$DC$Sp3$Wd3 #should be $srcd/logs/yyyy-mm-dd_Debug
+
+
+
+##### --- ./code/prog-cm/dialogDisplay.sh --- #####
+## -- Description -- ##
+Small utility to add in color preferences and remove them on a temporary basis.
+
+## -- Variables -- ##
+DISPLAY_FILE The title of the costum display file, should be located in same dir. 
+DISP_LOC Location of prog and display file. Must end in a slash
+DISPLAY_PRESET [start|stop], used when calling script internally.
+DISPLAY_SETTING [start|stop], can be entered manually after running or pulled from $1.
 
 
 
@@ -180,11 +196,7 @@ temp files: i.e. ./temp/tmp<name>.txt
 #pulls
 source ./code/conf-hm/config-A.sh
 source ./code/conf-hm/config-B.sh
-source ./code/conf-hm/config-HID.sh
-source ./code/conf-hm/config-GM.sh
-#opens
-source ./code/prog-hm/rsync.sh
-source ./code/prog-hm/tar.sh
+
 
 ## -- Variables -- ##
 #dialog exit status codes
@@ -266,12 +278,12 @@ The main program for conducting rsync backups. Rsync runs from folder location w
 #uses (via ./code/dialog.sh via ./code/master.sh)
 source ./code/com.sh
 source ./code/var.sh
+source ./code/conf-hm/config-HID.sh
+source ./code/conf-hm/config-GM.sh
 temp files: i.e. ./temp/tmp<name>.txt
 #uses (via ./code/dialog.sh)
 source ./code/conf-hm/config-A.sh
 source ./code/conf-hm/config-B.sh
-source ./code/conf-hm/config-HID.sh
-source ./code/conf-hm/config-GM.sh
 
 ## -- Inputs -- ##
 $OutA1 #see dialog.sh
@@ -300,12 +312,12 @@ The main program for conducting tar backups. Tar runs from destination location 
 #uses (via ./code/dialog.sh via ./code/master.sh)
 source ./code/com.sh
 source ./code/var.sh
+source ./code/conf-hm/config-HID.sh
+source ./code/conf-hm/config-GM.sh
 temp files: i.e. ./temp/tmp<name>.txt
 #uses (via ./code/dialog.sh)
 source ./code/conf-hm/config-A.sh
 source ./code/conf-hm/config-B.sh
-source ./code/conf-hm/config-HID.sh
-source ./code/conf-hm/config-GM.sh
 
 ## -- Inputs -- ##
 $OutA2 #see dialog.sh
