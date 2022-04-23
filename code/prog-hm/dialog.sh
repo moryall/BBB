@@ -471,13 +471,6 @@ case $return_value in # Act on the exit status
   $DIALOG_CANCEL)
   clear
   echo "Final Confirmation Cancelation" | tee -a "$log" | tee -a "$debug"
-  #remove color scheme for dialog
-  if [ ! -f /etc/dialogrc__TEMPBKUP__ ]; then
-	rm /etc/dialogrc
-  else
-	rm /etc/dialogrc
-	mv /etc/dialogrc__TEMPBKUP__ /etc/dialogrc
-  fi
   exit
   ;;
 esac

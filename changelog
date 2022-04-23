@@ -1,6 +1,10 @@
 Version_Code.Sub_Prog.MinorTweaks
 
 ---
+x2.00.00-04
+Date: 4/22/2022
+	Added dialogDisplay (color options) to progran, runs through BKUP-RUN so always clears.
+---
 x2.00.00-03
 Date: 4/8/2022
 	Completed var/com split. Began code review and simplification. Completed code review. 
