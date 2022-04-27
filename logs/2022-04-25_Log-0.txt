@@ -1,0 +1,110 @@
+Log File - Mon 25 Apr 2022 03:31:48 PM PDT
+BBB version x2.00.00-03
+User: michael
+File Location:
+/home/michael/DATA/Computers/git/BBB
+
+Working Directory:
+/home/michael/DATA/Computers/git
+
+User Changed to: /home/michael/Z
+
+User Changed to: /home/michael/DATA/Computers/git
+
+User Changed to: /home/michael/DATA/Computers/git
+
+User Changed to: /home/michael/Z
+
+User Changed to: darcy
+
+Program Choice: 4 BOTH - different folders
+RS: 1:1 ; Tar: 1.
+RS Options: "--help "
+---
+
+#########################
+rsync choices A1:
+'2 Home Hidden Folders'
+_________________________
+rsync choices B1:
+'1 ARCHIVE'
+'2 DATA'
+_________________________
+tar choices A2:
+'1 Root'
+'3 Home Visible Files'
+_________________________
+tar choices B2:
+'1 ARCHIVE'
+'2 DATA'
+_________________________
+
+
+#########################
+ -- Main Programs -- 
+
+Start rsync - Mon 25 Apr 2022 03:33:23 PM PDT
+### FOLDERS A ###
+--Backing up Home Hidden Folders
+-Backing up .compiz
+-Backing up .config
+-Backing up .gconf
+-Backing up .gnome/apps
+-Backing up .gnucash
+-Backing up .local/share/fonts
+-Backing up .local/share/gnome-shell
+-Backing up .local/share/gnome-software
+-Backing up .local/share/kdenlive
+-Backing up .local/share/keyrings
+-Backing up .local/share/nautilus
+-Backing up .local/share/okular
+-Backing up .local/share/rhythmbox
+-Backing up .local/share/shotwell
+-Backing up .mozilla
+-Backing up .pwsafe
+-Backing up .ssh
+-Backing up .thunderbird
+Home Hidden Folders Complete - Mon 25 Apr 2022 03:33:23 PM PDT
+___
+
+### FOLDERS B ###
+--Backing up ARCHIVE
+ARCHIVE is Complete - Mon 25 Apr 2022 03:33:23 PM PDT
+___
+
+--Backing up DATA
+DATA is Complete - Mon 25 Apr 2022 03:33:23 PM PDT
+___
+
+Completed rsync - Mon 25 Apr 2022 03:33:23 PM PDT
+
+
+__________________________
+
+
+
+Starting tar...
+Start tar - Mon 25 Apr 2022 03:33:23 PM PDT
+### FOLDERS A ###
+--Backing up Root (i.e. /)
+Backing up Boot (i.e. /boot)
+Root Complete - Mon 25 Apr 2022 03:33:23 PM PDT
+___
+
+--Backing up Home Visible Files
+Home Visible Files Complete - Mon 25 Apr 2022 03:33:23 PM PDT
+___
+
+### FOLDERS B ###
+--Backing up ARCHIVE
+ARCHIVE is Complete - Mon 25 Apr 2022 03:33:23 PM PDT
+___
+
+--Backing up DATA
+DATA is Complete - Mon 25 Apr 2022 03:33:23 PM PDT
+___
+
+Completed tar - Mon 25 Apr 2022 03:33:23 PM PDT
+
+Finished Backup
+Completed at - Mon 25 Apr 2022 03:33:23 PM PDT

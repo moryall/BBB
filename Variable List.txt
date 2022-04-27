@@ -34,6 +34,7 @@ A list of variables used across BBB.
 f_COUNT=0 #counter for repeats of folder select loop
 p_COUNT=0 #counter for repeats of program and folders loops
 n_COUNT=0 #counter for repeats of name, program, folder loops
+L_COUNT=0 #counter for repeats of location, name, program, folder loops
 
 #words
 Wd1="Backup" #Used to make tar files
@@ -267,7 +268,7 @@ OUTPUT #used slightly differently in rsync and tar; cleared between programs
 
 ## -- Temp Files -- ##
 TmpUser="tmpUser.txt" #specifcy temp file for user name
-
+TmpLoc="tmpLoc.txt" #specifcy temp file for specified output location name
 
 
 ##### --- ./code/prog-hm/rsync.sh --- #####

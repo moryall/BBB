@@ -15,7 +15,10 @@
 
 ### -- Dialog 1 -- ###
 # - Verify Location - #
-dialog --yes-label "Continue" --no-label "Cancel" --title "Backup Intro 1" --yesno  "This is: $PRGNM version $Ver \n 
+SAVE_cwd="$cwd"
+while true; do #1 Location (final Redo)
+while true; do #1.0 Location
+dialog --extra-button --extra-label "Change" --yes-label "Continue" --no-label "Cancel" --title "Backup Intro 1" --yesno  "This is: $PRGNM version $Ver \n 
 This program will create a backup copy of your files. \n
 You will be provided with choices for compression or not.\n \n
 WARNING! Please be sure the following is the desired output location.\n \n
@@ -23,19 +26,44 @@ File location: \n
 $cwd" 22 76 
 return_value=$? # Get dialog's exit status
 case $return_value in # Act on the exit status
-  $DIALOG_OK) ;;
+  $DIALOG_OK) 
+  	break ;; #1.0x
   $DIALOG_CANCEL)
   	clear
-	echo "Canceled on Source Check 1" | tee -a "$log" | tee -a "$debug"
+	echo "Canceled on Source Check 1a" | tee -a "$log" | tee -a "$debug"
 	exit
 	;;
+  $DIALOG_EXTRA)
+  	TmpLoc="tmpLoc.txt" #specifcy temp file for user name
+  	dialog --extra-button --extra-label "Default" --clear --title "Backup Location Correction" --inputbox "Please enter the correct pathway, restor default, or press cancel to exit." 30 76 2>$TmpLoc
+	return_value2=$? # Get dialog's exit status
+	case $return_value2 in # Act on the exit status
+		$DIALOG_OK)
+		cwd=$(<$TmpLoc) #this writes the temp file to N
+		rm $TmpLoc #remove tempfile
+		echo "Output Location Changed to: $cwd" | tee -a "$log" >> "$debug"
+		echo "" | tee -a "$log" >> "$debug"
+		;;
+		$DIALOG_EXTRA)
+		cwd="$SAVE_cwd" #this writes the saved OG
+		rm $TmpLoc #remove tempfile
+		echo "Output Location Changed to: $cwd" | tee -a "$log" >> "$debug"
+		echo "" | tee -a "$log" >> "$debug"		
+		;;
+		$DIALOG_CANCEL)
+		clear
+		echo "Canceled on Source Check 1b" | tee -a "$log" | tee -a "$debug"
+		rm $TmpLoc #clear temp file on cancel
+		exit
+		;;
+	esac
 esac
-
+done #1.0x
 
 ### -- Dialog 2 -- ###
 # - Verify Name - #
-while true; do #1 Name (final Redo)
-while true; do #1.1 Name choice confirm
+while true; do #1.1 Name (final Redo)
+while true; do #1.1.1 Name choice confirm
 #turing user name check
 dialog --extra-button --extra-label "Change" --title "Backup Intro 2" --yesno  "Is the following the correct user name for back up: \n
 $N" 30 76 
@@ -67,17 +95,17 @@ case $return_value in # Act on the exit status
 		;;
 	esac
 esac
-done #1.1x Name choice confirm
+done #1.1.1x Name choice confirm
 
 
 
 ####  --- PROGRAMS & FOLDERS --- #### 
 ### -- Dialog 3 -- ###
 # - Program choice - #
-while true; do #1.2 #Prog (final Redo)
+while true; do #1.1.2 #Prog (final Redo)
 RS_Options="$RSYNC_OPTIONS"
-while true; do #1.2.1 	Creation of Var after coice
-while true; do #1.2.1.1 Choice Loop (must choose or redo)
+while true; do #1.1.2.1 	Creation of Var after coice
+while true; do #1.1.2.1.1 Choice Loop (must choose or redo)
 #Choice of program 1
 PgOpt=(
 	1 "$PG01" off 
@@ -99,9 +127,9 @@ esac
 if [ -z "$Pg" ]; then
   dialog --ok-label "Redo" --title "No Program Selected" --msgbox "You must select a program." 30 76
 else
-break #1.2.1.1x
+break #1.1.2.1.1x
 fi
-done #1.2.1.1x
+done #1.1.2.1.1x
 
 #interpret choice
 case $Pg in
@@ -134,8 +162,8 @@ esac
 
 # - Rsync options - #
 #Check if even running RS 
-if [ "$OptRS" -eq "$O" ]; then #1.2.1.2a
-	while true; do #1.2.1.2a.1
+if [ "$OptRS" -eq "$O" ]; then #1.1.2.1.2a
+	while true; do #1.1.2.1.2a.1
 	dialog --cancel-label "No" --ok-label "Yes" --extra-button --extra-label "Change" --title "Rsync Options Choice" --yesno "Would you like to turn on the following rsync options: \n
 	\"$RS_Options\"" 30 76 
 	return_value=$? # Get dialog's exit status
@@ -143,11 +171,11 @@ if [ "$OptRS" -eq "$O" ]; then #1.2.1.2a
 	  $DIALOG_OK) 
 	  	RSoptDialog="rsync \"$RS_Options\" option(s): ON."
 	  	RS_Opt_ON=1
-	  	break ;; #1.2.1.2a.1x
+	  	break ;; #1.1.2.1.2a.1x
 	  $DIALOG_CANCEL)
 	  	RSoptDialog="rsync option(s): OFF."
 	  	RS_Opt_ON=0
-	  	break ;; #1.2.1.2a.1x
+	  	break ;; #1.1.2.1.2a.1x
 	  $DIALOG_EXTRA)
 	  	TmpRS="tmpRS.txt" #specifcy temp file for RS_Options
 	  	dialog --title "Rsync Options Set" --inputbox "Please enter desired options ending with a space" 30 76 2>$TmpRS
@@ -156,7 +184,7 @@ if [ "$OptRS" -eq "$O" ]; then #1.2.1.2a
 			$DIALOG_OK) 
 			RS_Options=$(<$TmpRS) #this writes the temp file to variable
 			rm $TmpRS #remove tempfile
-			: ;; #repeats 1.2.1.2a
+			: ;; #repeats 1.1.2.1.2a
 			$DIALOG_CANCEL)
 			clear
 			rm $TmpRS #clear temp file on cancel
@@ -164,12 +192,12 @@ if [ "$OptRS" -eq "$O" ]; then #1.2.1.2a
 			exit ;;
 		esac
 	esac
-	done #1.2.1.2a.1x
-   else #1.2.1.2b
+	done #1.1.2.1.2a.1x
+   else #1.1.2.1.2b
 	echo "" | tee -a "$log" >> "$debug"
 	RSoptDialog="Option(s): OFF."
    	RS_Opt_ON=0
-fi #1.2.1.2x
+fi #1.1.2.1.2x
 
 # - Display Program Choices - #
 dialog --extra-button --extra-label "Redo" --yes-label "Continue" --no-label "Cancel" --title "Backup Program Choice" --yesno  "You have selected to run the following: \n
@@ -179,14 +207,14 @@ You will be provided with folder choices next." 30 76
 return_value=$? # Get dialog's exit status
 case $return_value in # Act on the exit status
   $DIALOG_OK) 
-  	break ;; #1.2.1x
+  	break ;; #1.1.2.1x
   $DIALOG_EXTRA)
-  	: ;; #repeats loop 1.2.1
+  	: ;; #repeats loop 1.1.2.1
   $DIALOG_CANCEL)
   	echo "Canceled on Program Choice Confirm" | tee -a "$log" | tee -a "$debug"
 	exit ;;
 esac
-done #1.2.1x
+done #1.1.2.1x
 #confirm options
 if [ "$RS_Opt_ON" -eq "$Z" ]; then 
 	RS_Options=""
@@ -207,10 +235,10 @@ echo "" | tee -a "$log" >> "$debug"
 #Folder Options
 
 # - Display check skip - #
-while true; do #1.2.2  Folder (final Redo)
+while true; do #1.1.2.2  Folder (final Redo)
 
 # - Start Options Loop - #
-for i in $(seq $Lp); do #1.2.2.1
+for i in $(seq $Lp); do #1.1.2.2.1
 echo "# Loop number: $i Out of: $Lp" >> "$debug"
 LstA=() LstAT=() LstAR=() KpAR=() FldA=() OptA=() ChA=()
 FldB=() NumB=() LstB=() ChB=() #clear any existing (useful for loop)
@@ -301,15 +329,15 @@ if [ "$i" -eq "$T" ]; then
 	OutA2=$ChA
 	OutB2=$ChB
 fi
-done #1.2.2.1 done for options loop
+done #1.1.2.2.1 done for options loop
 
 
 
 # - Display Choices - #
  
 #Variable Maker Loop
-for x in {0..3};do #1.2.2.2 #Run 4 times (once per input/output)
-   for x in $x; do #1.2.2.2.1 #Get Variables for the round
+for x in {0..3};do #1.1.2.2.2 #Run 4 times (once per input/output)
+   for x in $x; do #1.1.2.2.2.1 #Get Variables for the round
    #clean up before loop
 OUT=() FLD=() PRINT=() TRASH=() Var1=() Var2=() Var3=() Var4=() Var5=()
 	case $x in
@@ -326,7 +354,7 @@ OUT=() FLD=() PRINT=() TRASH=() Var1=() Var2=() Var3=() Var4=() Var5=()
 		   OUT=$OutB2
 		   FLD=("${FldB[@]}") ;;
 	esac
-   done #1.2.2.2.1
+   done #1.1.2.2.2.1
 
 #Part 1: Make Printable List w/ numbers
 IFS=$Sp0 read -ra Var1 <<< "${OUT[@]}"  #break choice #s into seperate array items
@@ -344,7 +372,7 @@ PRINT=$(printf "'%s'\n" "${Var3[@]}") #print array items on new lines for displa
 IFS=$Sp5 read -ra Var5 <<< "${Var4[@]}" #break string into seperate array items by Sp5
 #Var5="Folder" per line
 
-   for x in $x; do #1.2.2.2.2 #Output for each round
+   for x in $x; do #1.1.2.2.2.2 #Output for each round
 	case $x in
 		0) 
 		   TRASH=("${Var5[@]}")
@@ -359,13 +387,15 @@ IFS=$Sp5 read -ra Var5 <<< "${Var4[@]}" #break string into seperate array items 
 		   CFB2=("${Var5[@]}")
 		   PRINTB2=("${PRINT[@]}") ;;
 	esac
-   done #1.2.2.2.2
-done #1.2.2.2
+   done #1.1.2.2.2.2
+done #1.1.2.2.2
 
 
 #Actuall Display them
-while true; do #1.2.2.3 #Just review choices
+while true; do #1.1.2.2.3 #Just review choices
 dialog --extra-button --extra-label "Redo" --yes-label "Continue" --no-label "Cancel" --title "Confirm Folder Options" --yesno  "Does the following look correct: \n \n
+Output Location: \n
+$cwd \n
 Programs Selected: \n
 $PgD \n
 $RSoptDialog \n \n
@@ -379,7 +409,7 @@ Confirm or press [Redo] to try again." 30 76
 return_value=$? # Get dialog's exit status
 case $return_value in # Act on the exit status
   $DIALOG_OK)
-  break 4 #1x.2x.2x.3x
+  break 5 #1x.1x.2x.2x.3x
   ;;
   $DIALOG_CANCEL)
   clear
@@ -387,13 +417,14 @@ case $return_value in # Act on the exit status
   exit
   ;;
   $DIALOG_EXTRA)
-  	while true; do #1.2.2.3.1
+  	while true; do #1.1.2.2.3.1
   	REDO_CH=()
   	REDO_OPTIONS=(
 	   1 "Folders" off 
 	   2 "Programs and Folders" off
 	   3 "Name, Programs, and Folders" off
-	   4 "Review Choices Again" on
+	   4 "Location, Name, Programs, and Folders" off
+	   5 "Review Choices Again" on
 	   )
 	REDO_CH=$(dialog --title "Redo Select" --radiolist "Select how much to Redo:" 30 76 20 "${REDO_OPTIONS[@]}" 2>&1 >/dev/tty)
 	return_value2=$?
@@ -414,32 +445,39 @@ case $return_value in # Act on the exit status
 	   	f_COUNT=$(($f_COUNT + $O))
 	   	echo "---" >> "$debug"
 	   	echo "Folder Options Reset: $f_COUNT" >> "$debug"
-	   	break 2 #1.2.2.3x.1x
+	   	break 2 #1.1.2.2.3x.1x
 	   	;;
 	   	2)
 	   	p_COUNT=$(($f_COUNT + $O))
 	   	echo "---" >> "$debug"
 	   	echo "Program Options Reset: $p_COUNT" >> "$debug"
-	   	break 3 #1.2.2x.3x.1x
+	   	break 3 #1.1.2.2x.3x.1x
 	   	;;
 	   	3)
 	   	n_COUNT=$(($f_COUNT + $O))
 	   	echo "---" >> "$debug"
 	   	echo "Name Options Reset: $p_COUNT" >> "$debug"
-	   	break 4 #1.2x.2x.3x.1x
+	   	break 4 #1.1.2x.2x.3x.1x
+	   	;;
+	   	3)
+	   	L_COUNT=$(($f_COUNT + $O))
+	   	echo "---" >> "$debug"
+	   	echo "Location Option Reset: $L_COUNT" >> "$debug"
+	   	break 5 #1.1x.2x.2x.3x.1x
 	   	;;
 	   	4)
 	   	#review again option
-	   	break 1 #1.2.2.3.1x
+	   	break 1 #1.1.2.2.3.1x
 	   	;;
 	   esac
 	fi
-	done #1.2.2.3.1x	
+	done #1.1.2.2.3.1x	
 esac
-done #1.2.2.3x #Choice Review
-done #1.2.2x #Name, Program, Folders
-done #1.2x #Name, Program
-done #1x  #Name
+done #1.1.2.2.3x #Choice Review
+done #1.1.2.2x #Location, Name, Program, Folders
+done #1.1.2x #Location, Name, Program
+done #1.1x  #Location, Name
+done #1x #Location
 
 #debug and results for logs
 echo "#########################" | tee -a "$log" >> "$debug"
@@ -479,6 +517,7 @@ esac
 #Version_Code.MinorChanges
 
 #Change Log:
+#5.01: Added change of output location.
 #5.00: Simplified variables. Cleaned dialog loops 1-3. Added write-in option for rsync settings. Added extra "Redo" label and allowed for Cancel. 
 #4.00: Simplified FldA & FldB; added unified config-A w/ easier item removal for RS
 #3.00: Added loop for variable maker. Added better loop numbering. Cleaners up layout.
