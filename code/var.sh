@@ -7,6 +7,7 @@
 f_COUNT=0 #counter for repeats of folder select loops
 p_COUNT=0 #counter for repeats of program and folders loops
 n_COUNT=0 #counter for repeats of name, program, folder loops
+L_COUNT=0 #counter for repeats of location, name, program, folder loops
 
 #words
 Wd1="Backup" #Used to make tar files

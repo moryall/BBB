@@ -2,14 +2,6 @@ TO DO:
 
 Wishlist:
 
-) Stream linecode 0
-	>Reassess Programs' internal validity with variables
-		>clarify variable names throughout - master list
-		>re-adjust Sp# spacer variable (so _ isn't disallowed in home/* names) 
-			>create a system check for unacceptable names?
-
-) streamline code 1
-
 
 ) Small prog for checking if drives mounted in specific (constant) location
 	) keep mounting seperate or join into BBB (prob stand alone with step) 
@@ -24,25 +16,34 @@ Wishlist:
 				    # send your email
 				fi
 		>if found provide list for choices for use in new dialog
-
-) add proper Redo and Cancel options, with loops
-#hence forth cancel restoration, extra addition in place of redo.
-#Need to check and overhaul dialog --checklist options
-#nested loops (break n) n=nested loops to break.
-	) Add "Redo" - 1 loop for: location, user/input, program, folders
+	) idea flow:
+		1) list all drives
+		2) Open or close?
+		3) dynamic list of open or closed drives available based on UUID
+			a) check if UUID is present
+			b) refine list by un/mounted
+		4) select
+		5) run action
+			a) determine if regular mount or crypt
+			b) run appropriate action
+		
+	
 
 	) Add dialog loop for location in dest or not
 		>If not in dest > Select dest from drives that pass check
 		>If in dest > usual prompt to verify
 		>extra button is redo, cancel actually cancels 
-		3 windows (y/n for in location, radio for drive select, confirmation)
+		3 windows
+			1) Y/N in destination?
+				No) radiolist for drive select
+				Yes) Continue
+			2) Is this location correct? 
+				Yes) continue
+				No) Extra, back to 2
+				Cancel) exit
 	
-	) Confirm Folder Options - Confirm, Redo, Cancel
-		Redo can go back to folders and program
-
 	) reprint final info on double check
 		>add each prog version (including master)
-		>Extra = New radiolist for Redo + each layer back)
 		
 ) streamline code 2 
 	

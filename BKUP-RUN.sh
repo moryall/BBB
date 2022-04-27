@@ -61,9 +61,12 @@ exec 2>&3
 #open
 echo ""
 echo "Starting Program..."
+sudo ./code/prog-cm/dialogDisplay.sh start ./code/prog-cm/
 sudo bash ./$FL3$SL$Prog00 #runs master.sh (check var)
 
 #clean
+echo "closing BKUP-RUN..."
+sudo ./code/prog-cm/dialogDisplay.sh stop ./code/prog-cm/
 rm "$tmpA"
 rm "$tmpB"
 rm "$tmpC"
@@ -74,8 +77,6 @@ rmdir "$srcd$SL$FL2"
 echo ""
 echo -n "Press [ENTER] to close program"
 read var_blank
-echo "closing BKUP-RUN..."
-sleep 2s
 exit
 
 
@@ -84,6 +85,7 @@ exit
 
 #Change Log:
 
+#2.03: Added dialogDisplay start and stop.
 #2.02: Cleaned code and clarified comments. Added removal of temp files.
 #2.01: Updated to reflect new directory structure
 #2.00: Added code to grab and pass user name, and script choices to files in anticipation of one file to run TAR and RSYNC with passed options until another method of running sudo safely for long periods is trialed. 

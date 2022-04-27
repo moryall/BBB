@@ -57,10 +57,53 @@ echo "$cwd" | tee -a "$log" >> "$debug"
 echo "" | tee -a "$log" >> "$debug"
 
 
-
 ##### --- PULL MAIN PROGRAM --- #####
+#Run choice sub-program
 source ./code/prog-hm/dialog.sh
 
+#Prepare Options
+source ./code/conf-hm/config-HID.sh
+source ./code/conf-hm/config-GM.sh
+
+#Run backup sub-program
+clear #So you can see the text on the screen
+echo "#########################" | tee -a "$log" | tee -a "$debug"
+echo " -- Main Programs -- " | tee -a "$log" | tee -a "$debug"
+
+#options
+if [ "$OptRS" -eq "$O" ]; then
+	echo "" | tee -a "$log" | tee -a "$debug"
+	echo "Starting rsync..."
+	printf "Start rsync - $(date)" | tee -a "$log" >> "$debug"
+	echo "" | tee -a "$log" | tee -a "$debug"
+	source ./code/prog-hm/rsync.sh
+	printf "Completed rsync - $(date)" | tee -a "$log" >> "$debug"
+	echo "" | tee -a "$log" | tee -a "$debug"
+  elif [ "$OptRS" -eq "$Z" ]; then
+  	echo ""
+  else
+  	echo "No program selected - see debug log" | tee -a "$log" | tee -a "$debug"
+fi
+PATHIN=() PATHOUT=() INPUT=() OUTPUT=() #clear between programs
+
+echo "" | tee -a "$log" >> "$debug"
+echo "" | tee -a "$log" >> "$debug"
+echo "__________________________" | tee -a "$log" >> "$debug"
+echo "" | tee -a "$log" >> "$debug"
+echo "" | tee -a "$log" >> "$debug"
+if [ "$OptTar" -eq "$O" ]; then
+	echo "" | tee -a "$log" | tee -a "$debug"
+	echo "Starting tar..." | tee -a "$log" | tee -a "$debug"
+	printf "Start tar - $(date)" | tee -a "$log" >> "$debug"
+	echo "" | tee -a "$log" | tee -a "$debug"
+	source ./code/prog-hm/tar.sh
+	printf "Completed tar - $(date)" | tee -a "$log" >> "$debug"
+	echo "" | tee -a "$log" | tee -a "$debug"
+  elif [ "$OptTar" -eq "$Z" ]; then
+  	echo ""
+  else
+  	echo "No program selected - see debug log" | tee -a "$log" | tee -a "$debug"
+fi
 
 
 ##### --- Finish --- #####
@@ -77,6 +120,7 @@ exit
 
 #Change Log:
 
+#1.03: Brought more sub-programs in, reduced sub-sub programs. 
 #1.02: Cleaned up code comments
 #1.01: Corrected for var/com split
 #1.00: Version Original version
