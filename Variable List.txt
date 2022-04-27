@@ -340,6 +340,114 @@ OP_LOC #variable OutPut LOCation
 
 
 
+##### --- ./code/prog-cm/driveAttach.sh --- #####
+## -- Description -- ##
+Stand alone program used to mount/decrypt, unmount/close, and safely remove drives. heavely relies on preconfiguration of fstab and crypttab. Do not SOURCE w/ driveCheck.
+
+## -- Source -- ##
+/etc/crypttab
+/etc/fstab
+
+## -- Inputs -- ##
+In top of file specify PART=UUID and DESC=Description
+
+## -- Variables -- ##
+PART[#]="<string>" #Partition UUID for drive to be mounted (if crypt seen in crypttab)
+DESC[#]="<sting>" #Human readable description of equivilent PART[#]
+FOUND= #Looks UUID up to get Location (lsblk=name; but with blkid)
+CRYPT_TEST= #Looks UUID up to get crypt Location (lsblk=name) for crypt
+A= #Temp variable, if regular drive will be mount point. Crypt will be blank always.
+B= #Temp variable, if crypt will be mount point.
+DMOUNT_Y[#]= #binary y/n Y=1, if Drive has Mount
+CMOUNT_Y[#]= #binary y/n Y=1, if Crypt has Mount
+
+#U/MNT = UMNT and equivilent MNT: sem-temp variable
+U/MNT_U[#]= #UUID
+U/MNT_L[#]= #Location (lsblk=name)
+U/MNT_N[#]= #number on list
+U/MNT_D[#]= #description
+U/MNT_M[#]= #mount point
+U/MNT_CL[#]= #Location (lsblk=name) but crypt
+U/MNT_CM[#]= #is Crypt mount point
+U/MNT_CU[#]= #UUID for crypt drive based on crypt mountpoint from fstab
+#DRIVE_ equivelents and display made from OC choice, either of UMNT or MNT.  
+DRIVE_U[#]= #UUID
+DRIVE_L[#]= #Location (lsblk=name)
+DRIVE_N[#]= #number on list
+DRIVE_D[#]= #description
+DRIVE_M[#]= #mount point
+DRIVE_CL[#]= #Location (lsblk=name) but crypt
+DRIVE_CM[#]= #is Crypt mount point
+DRIVE_CU[#]= #UUID for crypt drive based on crypt mountpoint from fstab
+
+#Inputs
+OC= #Open / Close choice. Accepted inputs and equivilants: [cancel|exit] [open|mount|decrypt] [close|encrypt] [remove|disconnect].
+SEL= #numerical selection of drive. From DRIVE/U/MNT_N[#]= which is true to original numbering in header 
+check= #temp variable for user confirmation of selection
+
+#change from specified array entry to single variables to reduce error. 
+TARGET_CRYPT_Y=${CRYPT_Y[$SEL]} #binary y=1 if in crypttab
+TARGET_DMNT_Y=${DMOUNT_Y[$SEL]} #binary y=1 drive has mountpoint
+TARGET_CMNT_Y=${CMOUNT_Y[$SEL]} #binary y=1 crypt has mountpoint
+TARGET_DU=${DRIVE_U[$SEL]} #UUID
+TARGET_DNAME=${DRIVE_L[$SEL]} #Location (lsblk=name)
+TARGET_DESC=${DRIVE_D[$SEL]} #Drive Description (from list)
+TARGET_DMOUNT=${DRIVE_M[$SEL]} #drive mountpoint
+TARGET_CNAME=${DRIVE_CL[$SEL]} #Location (lsblk=name) but crypt
+TARGET_CMOUNT=${DRIVE_CM[$SEL]} #crypt mountpoint
+TARGET_CU=${DRIVE_CU[$SEL]} #UUID for crypt
+
+MOUNT= #is specific end mountpoint to use with u/mount cmd
+DRIVE= #Looks UUID up to get full DISK Location (lsblk=name; but with blkid); for eject
+
+
+
+##### --- ./code/prog-cm/driveCheck.sh --- #####
+## -- Description -- ##
+Checks if A) specified drive is present, B) ensures check.file contains specified string at given mountpoint. Can run as program (will prompt options), or with inputs.
+
+## -- Usage -- ##
+bash ./driveCheck.sh [operation mode] [output option] <tempfile>
+source ./driveCheck.sh [operation mode] [output option] <tempfile>
+specify $OM & $OO (optionally $tmpMNTS) and use source ./driveCheck.sh
+#Modes: list, mounts, dialog
+	list: output will list drive as <#) Mnt/loc: Description>
+	mounts: output will list drives as <Mnt/loc>
+	dialog: output will list drives as <# "Mnt/loc" off>
+#Outputs: display, file, variable
+	display: will output to standard output
+	file
+
+## -- Source -- ##
+/etc/crypttab
+/etc/fstab
+
+## -- Inputs -- ##
+In top of file specify PART=UUID, CHECK=<specific string> and DESC=Description
+
+## -- Variables -- ##
+PART[#]="<string>" #Partition UUID for drive to be mounted (if crypt seen in crypttab)
+DESC[#]="<sting>" #Human readable description of equivilent PART[#]
+CHECK[#]='<string' #Random string to match in associated check.file
+FOUND= #Looks UUID up to get Location (lsblk=name; but with blkid)
+CRYPT_TEST= #Looks UUID up to get crypt Location (lsblk=name) for crypt
+A= #Temp variable, if regular drive will be mount point. Crypt will be blank always.
+B= #Temp variable, if crypt will be mount point.
+DMOUNT_Y[#]= #binary y/n Y=1, if Drive has Mount
+CMOUNT_Y[#]= #binary y/n Y=1, if Crypt has Mount
+DRIVE_NUM[#]= #number on list
+DRIVE_MNT[#]= #mount point
+DRIVE_DESC[#]= #description
+File= #takes Mnt/loc and appends /check.file to be used to compare check value
+Manual_1Y= #binary y/n Y=1, for if any manual input. signaling need for varification.
+Manual_2Y= #binary y/n Y=1, for if any manual input. signaling need for varification.
+
+OM= #Operation Mode [will check if specified, then $1, then prompt]
+OO= #Output Option [will check if specified, then $2, then prompt]
+tmpMNTS= #default temp loc/file to write out. [will check if specified, then $3, never promts]
+check= #temp variable for user confirmation of selection
+MOUNT_POINTS[#]= #variable array with all moutned and check verrified drives.
+
 
 
 
