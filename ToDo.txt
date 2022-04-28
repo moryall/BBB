@@ -7,17 +7,16 @@ Wishlist:
 	) integrate driveCheck add a config file & integrate into BBB
 	) create more independant driveAttach, but as clean way to read ^ config, as well as write to it (and create check.file)
 	) Add dialog loop for location in dest or not
-		>If not in dest > Select dest from drives that pass check
+		>If not in dest > Select dest from drives that pass check > Extra option to manually edit
 		>If in dest > usual prompt to verify
 		>extra button is redo, cancel actually cancels 
 		3 windows
-			1) Y/N in destination?
-				No) radiolist for drive select
-				Yes) Continue
-			2) Is this location correct? 
-				Yes) continue
-				No) Extra, back to 2
-				Cancel) exit
+			0) Drive confirmation page (confirm, cancel, change>>)
+			1) Mnt point radio list (confirm, cancel, manual entry)
+			2) Manual entry of point (confirm>0, redo resets default>0, cancel)
+	) Redo language around cwd variable and how it's used
+		> var.sh to contain setting for "in output" mode (default) or specified with variable to use as cwd
+		> ensure use of srcd in all relevant places instead of cwd, and use dynamic locations.
 	
 ) reprint final info on double check
 	>add each prog version (including master)
