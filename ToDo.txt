@@ -4,31 +4,8 @@ Wishlist:
 
 
 ) Small prog for checking if drives mounted in specific (constant) location
-	) keep mounting seperate or join into BBB (prob stand alone with step) 
-	) see crypt3.sh	
-	) partition mount check prog
-		>New config for drives labels, mntpoint, & uuid
-		>Write computer side setup instructions
-		>Darcy Double Check, search for file with uuid on location
-				str="ABCD"
-				content=$(cat test.txt)
-				if [ "$str" == "$content" ];then
-				    # send your email
-				fi
-		>if found provide list for choices for use in new dialog
-	) idea flow:
-		1) list all drives
-		2) Open or close?
-		3) dynamic list of open or closed drives available based on UUID
-			a) check if UUID is present
-			b) refine list by un/mounted
-		4) select
-		5) run action
-			a) determine if regular mount or crypt
-			b) run appropriate action
-		
-	
-
+	) integrate driveCheck add a config file & integrate into BBB
+	) create more independant driveAttach, but as clean way to read ^ config, as well as write to it (and create check.file)
 	) Add dialog loop for location in dest or not
 		>If not in dest > Select dest from drives that pass check
 		>If in dest > usual prompt to verify
@@ -42,29 +19,23 @@ Wishlist:
 				No) Extra, back to 2
 				Cancel) exit
 	
-	) reprint final info on double check
-		>add each prog version (including master)
+) reprint final info on double check
+	>add each prog version (including master)
 		
-) streamline code 2 
+) streamline code 2 & documentation
 	
-) check that inert and live rsync and tar match
-	both should: 
-	>Check for unique dest folder specified from var
-	>Check consistency in outputs
-
 ) add code option for inert running 
-	>Have this change master vers number so final confirmation prints
-	>Dialog should actually be pulled by seperate head prog
-	>Master inert flag goes there to progs 
-		>RS, TAR, Dialog, etc. can all read it read it
+	>Have this change master vers number so final confirmation prints as inert
+	>Master inert flag goes from master to programs (tar and rs) 
+		>RS, TAR, Dialog, etc. can all read it
 		>Master prog manages 
 			>inert flag coding, 
 			>load var
 			>setting prgnm (rm from var)
 			>making appropriately named log files
 			>clearing temp files
+		>tar inert potential: tar -cvf /dev/null mydir 
 		
-	
 ) Make a readme user guide
 
 ) improve documentation (comments, change logs, howto: advanced changes, etc)
@@ -81,8 +52,4 @@ Wishlist:
 
 ) improve TX.sh on server
 	> simplify opening vs clossing ssh password in mini-script
-	> 
-
-
-
-
+	> setup to run BBB
