@@ -13,7 +13,6 @@
    	   > config-B.sh - #config for B folders used in both
    	   > config-GM.sh - #config for game folders in both
    	   > config-HID.sh - #config for hidden folders in both
-      	)Xconf-srv - #configuration files for server backup
       	) prog-cm  - #program files used universally (may need different config file)
       	   > dialogDisplay.sh - #Changest dialogrc file in /etc to custom specified
       	   > dialogrc-purple - #custom dialogrc file used by dialogDisplay
@@ -24,7 +23,7 @@
       	   > dialog.sh - #the main body of choice selection and preperation
       	   > rsync.sh - #the main rsync program
       	   > tar.sh - #the main tar program
-      	)Xprog-srv - #program files used for server backup
+      	)prog-srv - #program files used for server backup
       > com.sh - #common variables used in all programs. Called mainly by master.sh
       > master.sh - #main program that determines what other programs and config files
       > var.sh - #BBB specific variables. Called mainly by master.sh & RUN
