@@ -38,4 +38,4 @@ RSYNC_OPTIONS="--delete "
 
 #meta
 PRGNM="BBB"
-Ver="x2.00.00-03"
+Ver="x2.00.00-05"
