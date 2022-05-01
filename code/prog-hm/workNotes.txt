@@ -1,0 +1,32 @@
+x2.00.00-05
+Date: 4/30/2022
+	Final tweaks, quick addition of simplified server bkup. Only Readme to adjust.
+---
+x2.00.00-04b
+Date: 4/26/2022
+	Added in driveCheck & driveAttach. Needs integration.
+---
+x2.00.00-04a
+Date: 4/22/2022
+	Added dialogDisplay (color options) to progran, runs through BKUP-RUN so always clears.
+---
+x2.00.00-03
+Date: 4/8/2022
+	Completed var/com split. Began code review and simplification. Completed code review. 
+---
+x2.00.00-03
+Date: 4/7/2022
+	Completed var/com split. Began code review and simplification. Ended on Dialog 3. Added rsync options edit. 
+---
+x2.00.00-02
+Date: 4/5/2022
+	Fixed Folder A nonsense, now recombined, optional filtered as well as misc code cleaning. 
+---
+x2.00.00-01
+Date: 4/5/2022
+	Updated Dialog to have looped variable maker, cleaned code, and changed forbidden spacer to ^ instead of _ for the variable maker. Now tied to Sp0 and Sp5
+---
+x2.00.00
+Date: 4/4/2022
+	Began work on new directory and program overall in experimental branch.
+

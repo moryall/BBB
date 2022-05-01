@@ -1,16 +1,31 @@
 Version_Code.Sub_Prog.MinorTweaks
 
 ---
+2.00.00
+Date: 2022-04-30
+	Added:
+		-driveAttach and driveCheck utilities in prog-cm. 
+		-added dialogDisplay to change color of Dialog menus.
+		-simple bash script in prog-srv for server backup.		
+	Changed: 
+		-var into var & com.
+		-listings for Folder A config.
+		-seperated HID and GameAr (aka GM) config files. 
+		-Ability to change output directory: manual and with driveCheck list
+	Revised:
+		-internal method for Folder A list creation.
+		-misc. internal code use.	
+---
 1.00.02
-Date: 4/6/2022
+Date: 2022-04-06
 	Fixed error with fld A option choice display with IF loops. 
 ---
 1.00.01
-Date: 4/4/2022
+Date: 2022-04-04
 	Minor spelling and function tweaks. Now works as intended.
 ---
 1.00.00
-Date: 4/2/2022
+Date: 2022-04-02
 	Finalized basic features with update to dialog, rsync, and use of simple auto version checking and configuration files.
 	
 	

@@ -4,7 +4,7 @@
 
 #  --- OPTIONS  --- #
 #Hidden Folders to copy (actual variable array)
-# !!! Options MUST contain NO spaces. No underscores!!!
+# !!! Options MUST contain NO spaces. No Circumflex "^"!!!
 HID=(
 ".compiz" 
 ".config" 
@@ -25,15 +25,3 @@ HID=(
 ".ssh" 
 ".thunderbird"
 	)
-
-#List of Folder to copy for games (actual variable array)
-# !!! Options MUST contain NO spaces. No underscores!!!
-GameAr=(
-"MC" 
-"Steam"
-"Server"
-".factorio" 
-".local/share/Steam"
-".minecraft"
-".Steam"
-)

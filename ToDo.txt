@@ -1,0 +1,51 @@
+TO DO:
+
+) complete!
+
+	
+########	
+Wishlist for version 3:
+
+) Principle Goals for Version 3:
+	1) Increase shell security
+	2) Incease useability
+	3) Create effective documentation & code streamlining.
+	
+	
+1) Increase shell security
+	) fucntions and permissions instead of whole sudo wrapper.
+		> call specific functions by path not name
+		> protect user input and file changes
+	> Language around cwd and srcd
+
+2) Incease useability
+	) independant driveAttach
+		> Shares driveCheck config, but can edit and make check.file
+		> Documentation for specifically how to get and add data to crypttab & fstab
+	) easy settings for "default" location
+	) reprint on final double-check: everything in cluding (sub)programs versions
+	) add code option for inert running 
+		>Have this change master vers number so final confirmation prints as inert
+		>Master inert flag goes from master to programs (tar and rs) 
+			>RS, TAR, Dialog, etc. can all read it
+			>Master prog manages 
+				>inert flag coding, 
+				>load var
+				>setting prgnm (rm from var)
+				>making appropriately named log files
+				>clearing temp files
+			>tar inert potential: tar -cvf /dev/null mydir 
+	) server backup program Integration (more steps as needed)
+		>hard switch in Master prog
+		>Try not to alter progs too much
+			>Resuse as much code as possible
+			>common progs reuse in state
+			>altered or unique to be renamed
+
+3) Create effective documentation & code streamlining.
+	> Better README.md
+	> Get into proper semantic versioning & changelog
+
+
+
+
