@@ -1,9 +1,7 @@
 TO DO:
 
-) improve TX.sh on server
-	> simplify opening vs clossing ssh password in mini-script
-	> setup to run BBB
-	
+) complete!
+
 	
 ########	
 Wishlist for version 3:
