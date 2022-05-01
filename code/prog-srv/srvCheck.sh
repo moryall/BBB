@@ -9,14 +9,19 @@
 #####  --- SETUP --- #####
 
 #Drives and Checks
-PART[0]="c06d5ea5-f492-45dc-8640-bbf59c2dd991" ; DESC[0]="Cheap Drive"
-CHECK[0]='.!aG#{O+DE9RuHxB4gYlXI),^jqPrkqh'
-PART[1]="a1b94d33-975a-4f8e-94b8-2b1aa5e9e0e9" ; DESC[1]="WD BKUP"
-CHECK[1]='7>fIcNm3L6+SZFRdVpEJs.TdgxrPCle0'
-PART[2]="cf4d1c05-274d-4427-996a-cb662fa98729" ; DESC[2]="Seagate BKUP"
-CHECK[2]='qY%N+Fk:<PIu1J2DyrU55zT%4l.\9Cwa'
-PART[3]="67fa3c0e-cb77-463f-a2bb-f2826e397898" ; DESC[3]="Toshiba BKUP"
-CHECK[3]='vbp2@+iogn/wGRFe<Q>O0q:ZPRDKckWt'
+PART[0]="" ; DESC[0]="SBU-01"
+CHECK[0]='VCMBH,9Smy_@Kk6YTrU3U.f=/q5Phl#s'
+PART[1]="" ; DESC[1]="SBU-02"
+CHECK[1]=',f@sinuRa1adJA%9.\CL8pH-rSUX_m\='
+PART[2]="" ; DESC[2]="CBU-01"
+CHECK[2]='Qc:LT>>.v0pPBWn\52qx8zEkX3bH7Nr1'
+#PART[3]="" ; DESC[3]=""
+#CHECK[3]='e\-LmO<65Cd%Sw7@Ir.n^0Vf:/gYUaDF'
+#CHECK[4]='u:3eXtT70_%z.6-a^Lv=qjHFS/AnNEGB'
+#CHECK[5]='QJ=s,cY89HPqFuzm^3+b@Y^:rzw11/fi'
+#CHECK[6]='Os+pH4m1o7-j<uN#&M0>Rq1Lr9PbtxTX'
+#CHECK[7]='M0N_q6RK2#=TWBhAZYQgt&Jvp6P3%E,n'
+
 
 #####  --- LOAD DRIVES --- #####
 for i in ${!PART[@]}; do
@@ -251,4 +256,4 @@ fi
 
 #Change Log:
 
-#1.00: Initial release (home)
+#1.00: Initial release (srv)

@@ -34,29 +34,75 @@ case $return_value in # Act on the exit status
 	exit
 	;;
   $DIALOG_EXTRA)
-  	TmpLoc="tmpLoc.txt" #specifcy temp file for user name
-  	dialog --extra-button --extra-label "Default" --clear --title "Backup Location Correction" --inputbox "Please enter the correct pathway, restor default, or press cancel to exit." 30 76 2>$TmpLoc
-	return_value2=$? # Get dialog's exit status
-	case $return_value2 in # Act on the exit status
-		$DIALOG_OK)
-		cwd=$(<$TmpLoc) #this writes the temp file to N
-		rm $TmpLoc #remove tempfile
-		echo "Output Location Changed to: $cwd" | tee -a "$log" >> "$debug"
-		echo "" | tee -a "$log" >> "$debug"
-		;;
-		$DIALOG_EXTRA)
-		cwd="$SAVE_cwd" #this writes the saved OG
-		rm $TmpLoc #remove tempfile
-		echo "Output Location Changed to: $cwd" | tee -a "$log" >> "$debug"
-		echo "" | tee -a "$log" >> "$debug"		
-		;;
-		$DIALOG_CANCEL)
-		clear
-		echo "Canceled on Source Check 1b" | tee -a "$log" | tee -a "$debug"
-		rm $TmpLoc #clear temp file on cancel
-		exit
-		;;
+  
+	while true; do #1.0.1 Choice Loop (must choose or redo)
+	#Choice of location
+	OM=() OO=() tmpMNTS=()
+	OM="dialog" OO="file" tmpMNTS="$srcd$SL$FL2$SL$Wd4-mnts$Ext1"
+	source ./code/prog-cm/driveCheck.sh
+	Loc_temp=$(<"$tmpMNTS")
+	rm $tmpMNTS
+	Loc_temp=("${Loc_temp[@]}")
+	if [ -z "$Loc_temp" ]; then
+  	   return_value2="3"
+	else
+	Loc_CH=$(dialog --extra-button --extra-label "Manual" --yes-label "Continue" --no-label "Cancel" --title "Location Select" --radiolist "Select a approved directory:" 30 76 20 ${Loc_temp[@]} 2>&1 >/dev/tty)
+	return_value2=$?
+	fi
+	case $return_value2 in
+ 	$DIALOG_CANCEL)
+  	   dialog --title "Backup Canceled" --msgbox "Backup was canceled at your request." 30 76
+  	   clear
+  	   echo "Canceled on Source Check 1b" | tee -a "$log" >> "$debug"
+  	   exit ;;
+	$DIALOG_OK) 
+	   if [ -z "$Loc_CH" ]; then
+  	   dialog --ok-label "Redo" --title "No Location Selected" --msgbox "You must select a location or cancel." 30 76
+	   else
+	   Location="${DRIVE_AVAIL[$Loc_CH]}"
+	   cwd="${Location}"
+	   echo "Output Location Changed to: \"$cwd\"" | tee -a "$log" >> "$debug"
+	   echo "" | tee -a "$log" >> "$debug"
+	   break #1.0.1x
+	   fi
+	   ;;  
+  	$DIALOG_EXTRA)
+		while true; do #1.0.1.1 #must have non-empty cwd
+		TmpLoc="$srcd$SL$FL2$SL$Wd4-loc$Ext1" #specifcy temp file for location
+  		dialog --extra-button --extra-label "Default" --clear --title "Backup Location Correction" --inputbox "Please enter the correct pathway, restore default, or press cancel to exit.\n
+  		New entry should end without slash \"/\"\n
+  		Default: $SAVE_cwd" 30 76 2>$TmpLoc
+		return_value3=$? # Get dialog's exit status
+		case $return_value3 in # Act on the exit status
+			$DIALOG_OK)
+				input_check=$(<$TmpLoc)
+				if [[ ! -d "$input_check" ]]; then
+  	   			dialog --ok-label "Redo" --title "No Location Entered" --msgbox "You must enter a valid location or cancel." 30 76
+	 			else
+				cwd=$(<$TmpLoc) #this writes the temp file to cwd
+				rm $TmpLoc #remove tempfile
+				echo "Output Location Changed to: \"$cwd\"" | tee -a "$log" >> "$debug"
+				echo "" | tee -a "$log" >> "$debug"
+				break 2 #1.0.1x.1x
+				fi
+				;;
+			$DIALOG_EXTRA)
+				cwd="$SAVE_cwd" #this writes the saved OG
+				rm $TmpLoc #remove tempfile
+				echo "Output Location Changed to: \"$cwd\"" | tee -a "$log" >> "$debug"
+				echo "" | tee -a "$log" >> "$debug"	
+				break 2 #1.0.1x.1x	
+				;;
+			$DIALOG_CANCEL)
+				clear
+				echo "Canceled on Source Check 1b" | tee -a "$log" | tee -a "$debug"
+				rm $TmpLoc #clear temp file on cancel
+				exit
+				;;
+		esac
+		done #1.0.1.1x
 	esac
+	done #1.0.1x
 esac
 done #1.0x
 
@@ -459,13 +505,13 @@ case $return_value in # Act on the exit status
 	   	echo "Name Options Reset: $p_COUNT" >> "$debug"
 	   	break 4 #1.1.2x.2x.3x.1x
 	   	;;
-	   	3)
+	   	4)
 	   	L_COUNT=$(($f_COUNT + $O))
 	   	echo "---" >> "$debug"
 	   	echo "Location Option Reset: $L_COUNT" >> "$debug"
 	   	break 5 #1.1x.2x.2x.3x.1x
 	   	;;
-	   	4)
+	   	5)
 	   	#review again option
 	   	break 1 #1.1.2.2.3.1x
 	   	;;
@@ -517,6 +563,7 @@ esac
 #Version_Code.MinorChanges
 
 #Change Log:
+#5.02: Added driveCheck to provide list of verified & attached locations.
 #5.01: Added change of output location.
 #5.00: Simplified variables. Cleaned dialog loops 1-3. Added write-in option for rsync settings. Added extra "Redo" label and allowed for Cancel. 
 #4.00: Simplified FldA & FldB; added unified config-A w/ easier item removal for RS

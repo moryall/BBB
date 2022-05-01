@@ -329,4 +329,4 @@ exit
 
 #Change Log:
 
-#1.00: Initial Release of all textbased solution (see crypt1-3 for past iterations)
+#1.00: Initial Release (srv)
