@@ -34,9 +34,9 @@ do
 			INPUT="$PATHIN${HID[i4]}$SL"
 			OUTPUT="$PATHOUT$SL${HID[i4]}"
 			E="$PATHIN.local/share/Steam"
-			#echo "Input:$INPUT  Output:$OUTPUT" | tee -a "$debug"
+			echo "Input:$INPUT  Output:$OUTPUT" | tee -a "$debug"
 			echo "mkdir -p $OUTPUT"
-			echo "rsync -aEhi --progress --exclude \'$E\' $RS_Options$INPUT $OUTPUT" | tee -a "$debug"
+			rsync -aEhi --progress --exclude \'$E\' $RS_Options$INPUT $OUTPUT
 		done
 		echo "Home Hidden Folders Complete - $(date)" | tee -a "$log" | tee -a "$debug"
 		INPUT=()
@@ -48,8 +48,8 @@ do
 		echo "--Backing up Home Visible Files" | tee -a "$log" | tee -a "$debug"
 		INPUT="$PATHIN"
 		OUTPUT="$PATHOUT"
-		#echo "Input:$INPUT  Output:$OUTPUT" | tee -a "$debug"
-		echo "rsync -aEhi --exclude='*/' --progress $RS_Options$INPUT $OUTPUT" | tee -a "$debug"
+		echo "Input:$INPUT  Output:$OUTPUT" | tee -a "$debug"
+		rsync -aEhi --exclude='*/' --progress $RS_Options$INPUT $OUTPUT
 		echo "Home Visible Files Complete - $(date)" | tee -a "$log" | tee -a "$debug"
 		INPUT=()
 		OUTPUT=()
@@ -62,9 +62,9 @@ do
 			echo "-Backing up ${GameAr[i4]}" | tee -a "$log" | tee -a "$debug"
 			INPUT="$PATHIN${GameAr[i4]}"
 			OUTPUT="$PATHOUT"
-			#echo "Input:$INPUT  Output:$OUTPUT" | tee -a "$debug"
+			echo "Input:$INPUT  Output:$OUTPUT" | tee -a "$debug"
 			echo "mkdir -p $OUTPUT"
-			echo "rsync -aEhi --progress $RS_Options$INPUT $OUTPUT" | tee -a "$debug"
+			rsync -aEhi --progress $RS_Options$INPUT $OUTPUT
 		done
 		echo "Games Complete - $(date)" | tee -a "$log" | tee -a "$debug"
 		INPUT=()
@@ -83,7 +83,7 @@ for i5 in ${!CFB1[@]}; do
 	echo "--Backing up ${CFB1[i5]}" | tee -a "$log" | tee -a "$debug"
 	INPUT="$PATHIN${CFB1[i5]}"
 	OUTPUT="$PATHOUT"
-	echo "rsync -aEhi --progress $RS_Options$INPUT $OUTPUT" | tee -a "$debug"
+	rsync -aEhi --progress $RS_Options$INPUT $OUTPUT
 	echo "${CFB1[i5]} is Complete - $(date)" | tee -a "$log" | tee -a "$debug"
 	INPUT=()
 	OUTPUT=()

@@ -440,6 +440,7 @@ done #1.1.2.2.2
 #Actuall Display them
 while true; do #1.1.2.2.3 #Just review choices
 dialog --extra-button --extra-label "Redo" --yes-label "Continue" --no-label "Cancel" --title "Confirm Folder Options" --yesno  "Does the following look correct: \n \n
+This is: $PRGNM version $Ver \n
 Output Location: \n
 $cwd \n
 Programs Selected: \n

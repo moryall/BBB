@@ -33,13 +33,13 @@ do
 		echo "--Backing up Root (i.e. /)" | tee -a "$log" | tee -a "$debug"
 		TITLE="HM-Root"
 		OP_LOC="$DC$Sp3$Wd1$Sp3$TITLE$Ext2"
-		echo "tar cvpzf $OP_LOC --exclude=/proc --exclude=/lost+found --exclude=/mnt --exclude=/sys --exclude=/media --exclude=/run --exclude=/dev --exclude=/srv --exclude=/home --exclude=/boot --exclude=/tmp /"
+		tar cvpzf $OP_LOC --exclude=/proc --exclude=/lost+found --exclude=/mnt --exclude=/sys --exclude=/media --exclude=/run --exclude=/dev --exclude=/srv --exclude=/home --exclude=/boot --exclude=/tmp /
 		TITLE=()
 		OP_LOC=()
 		echo "Backing up Boot (i.e. /boot)" | tee -a "$log" | tee -a "$debug"
 		TITLE="HM-Boot"
 		OP_LOC="$DC$Sp3$Wd1$Sp3$TITLE$Ext2"
-		echo "tar cvpzf $OP_LOC /boot"
+		tar cvpzf $OP_LOC /boot
 		echo "Root Complete - $(date)" | tee -a "$log" | tee -a "$debug"
 		TITLE=()
 		OP_LOC=()
@@ -54,7 +54,7 @@ do
 		TITLE="HM-HFS(H)"
 		OP_LOC="$DC$Sp3$Wd1$Sp3$TITLE$Ext2"
 		E="$PATHIN.local/share/Steam"
-		echo "tar cvpzf $OP_LOC --exclude=$E $INPUT" | tee -a "$debug"
+		tar cvpzf $OP_LOC --exclude=$E $INPUT
 		echo "Home Hidden Folders Complete - $(date)" | tee -a "$log" | tee -a "$debug"
 		TITLE=()
 		OP_LOC=()
@@ -67,7 +67,7 @@ do
 		INPUT="$PATHIN$Sp4"
 		TITLE="HM-HFS(V)"
 		OP_LOC="$DC$Sp3$Wd1$Sp3$TITLE$Ext2"
-		echo "tar cvpzf $OP_LOC --no-recursion $INPUT" | tee -a "$debug"
+		tar cvpzf $OP_LOC --no-recursion $INPUT
 		echo "Home Visible Files Complete - $(date)" | tee -a "$log" | tee -a "$debug"
 		TITLE=()
 		OP_LOC=()
@@ -82,7 +82,7 @@ do
   		done
   		TITLE="HM-Games"
 		OP_LOC="$DC$Sp3$Wd1$Sp3$TITLE$Ext2"
-  		echo "tar cvpzf $OP_LOC $INPUT" | tee -a "$debug"
+  		tar cvpzf $OP_LOC $INPUT
 		echo "Games Complete - $(date)" | tee -a "$log" | tee -a "$debug"
 		TITLE=()
 		OP_LOC=()
@@ -102,7 +102,7 @@ for i5 in ${!CFB2[@]}; do
 	INPUT="$PATHIN${CFB2[i5]}"
 	TITLE="HM-${CFB2[i5]}"
 	OP_LOC="$DC$Sp3$Wd1$Sp3$TITLE$Ext2"
-	echo "tar -cvzf - $INPUT | split -b 40000M - $OP_LOC" | tee -a "$debug"
+	tar -cvzf - $INPUT | split -b 40000M - $OP_LOC
 	echo "${CFB1[i5]} is Complete - $(date)" | tee -a "$log" | tee -a "$debug"
 	TITLE=()
 	OP_LOC=()
