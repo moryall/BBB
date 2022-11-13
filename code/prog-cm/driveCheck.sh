@@ -12,9 +12,9 @@
 PART[0]="c06d5ea5-f492-45dc-8640-bbf59c2dd991" ; DESC[0]="Cheap Drive"
 CHECK[0]='.!aG#{O+DE9RuHxB4gYlXI),^jqPrkqh'
 PART[1]="a1b94d33-975a-4f8e-94b8-2b1aa5e9e0e9" ; DESC[1]="WD BKUP"
-CHECK[1]='7>fIcNm3L6+SZFRdVpEJs.TdgxrPCle0'
+CHECK[1]='1usD5pBItqY6HgxMb3ydsnKGiVGENAoR'
 PART[2]="cf4d1c05-274d-4427-996a-cb662fa98729" ; DESC[2]="Seagate BKUP"
-CHECK[2]='qY%N+Fk:<PIu1J2DyrU55zT%4l.\9Cwa'
+CHECK[2]='5Tekr6gFOA7iavx8cdQeINw0sfKzHuX6'
 PART[3]="67fa3c0e-cb77-463f-a2bb-f2826e397898" ; DESC[3]="Toshiba BKUP"
 CHECK[3]='vbp2@+iogn/wGRFe<Q>O0q:ZPRDKckWt'
 
